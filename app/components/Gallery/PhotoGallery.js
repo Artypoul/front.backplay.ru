@@ -1,69 +1,56 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import 'react-image-lightbox/style.css';
-import ImageLightbox from 'react-image-lightbox';
+import { ProductCard, EditProductCard, SearchProduct, Filter } from 'dan-components';
+import PropTypes from 'prop-types';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import styles from './photo-jss';
 
 function PhotoGallery(props) {
-  const [photoIndex, setPhotoIndex] = useState(0);
-  const [isOpen, setOpen] = useState(false);
   const { classes, imgData } = props;
 
-  const openPopup = index => {
-    setPhotoIndex(index);
-    setOpen(true);
+  const history = useHistory();
+
+  const editTrack = (trackId) => {
+    return () => {
+      history.push(`/music/${trackId}`);
+    };
   };
 
-  const onMovePrevRequest = () => {
-    setPhotoIndex((photoIndex + imgData.length - 1) % imgData.length);
+  const addToCart = (item) => {
+    return async () => {
+      console.log('item', item);
+    };
   };
 
-  const onMoveNextRequest = () => {
-    setPhotoIndex((photoIndex + imgData.length + 1) % imgData.length);
-  };
+  const isAuthor = false;
 
   return (
     <div>
-      {isOpen && (
-        <ImageLightbox
-          mainSrc={imgData[photoIndex].img}
-          nextSrc={imgData[(photoIndex + 1) % imgData.length].img}
-          prevSrc={imgData[(photoIndex + (imgData.length - 1)) % imgData.length].img}
-          onCloseRequest={() => setOpen(false)}
-          onMovePrevRequest={onMovePrevRequest}
-          onMoveNextRequest={onMoveNextRequest}
-        />
-      )}
+      <SearchProduct
+        dataProduct={[]}
+        listView='grid'
+      />
+
+      <Filter />
+
       <div className={classes.masonry}>
-        {
-          imgData.map((thumb, index) => (
-            <figure className={classes.item} key={index.toString()}>
-              <ButtonBase
-                focusRipple
-                className={classes.image}
-                focusVisibleClassName={classes.focusVisible}
-                onClick={() => openPopup(index)}
-              >
-                <img src={thumb.img} alt={thumb.title} />
-                <span className={classes.imageBackdrop} />
-                <span className={classes.imageButton}>
-                  <Typography
-                    component="span"
-                    variant="subtitle1"
-                    color="inherit"
-                    className={classes.imageTitle}
-                  >
-                    {thumb.title}
-                    <span className={classes.imageMarked} />
-                  </Typography>
-                </span>
-              </ButtonBase>
-            </figure>
-          ))
-        }
+        {isAuthor && (
+          <EditProductCard />
+        )}
+
+        {imgData.map((thumb, index) => (
+          <ProductCard
+            key={index}
+            thumbnail={thumb.img}
+            name={thumb.title}
+            desc={thumb.desc}
+            ratting={thumb.ratting}
+            price={thumb.price}
+            prevPrice={thumb.prevPrice}
+            soldout={thumb.soldout}
+            addToCart={addToCart(thumb)}
+          />
+        ))}
       </div>
     </div>
   );

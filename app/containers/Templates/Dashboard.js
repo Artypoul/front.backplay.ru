@@ -13,6 +13,21 @@ import DropMenuLayout from './layouts/DropMenuLayout';
 import MegaMenuLayout from './layouts/MegaMenuLayout';
 import styles from './appStyles-jss';
 
+const places = {
+  '/shop': {
+    name: 'Магазин',
+    path: '/shop',
+  },
+  '/ordes': {
+    name: 'Заказы',
+    path: '/ordes',
+  },
+  '/chat': {
+    path: '/chat',
+    name: 'Чат',
+  },
+};
+
 function Dashboard(props) {
   // Initial header style
   const [openGuide, setOpenGuide] = useState(false);
@@ -70,7 +85,8 @@ function Dashboard(props) {
   } = props;
   const titleException = ['/app', '/app/crm-dashboard', '/app/crypto-dashboard'];
   const parts = history.location.pathname.split('/');
-  const place = parts[parts.length - 1].replace('-', ' ');
+  // const place = parts[parts.length - 1].replace('-', ' ');
+  const place = places[history.location.pathname];
   return (
     <div
       style={{ minHeight: appHeight }}
@@ -100,7 +116,7 @@ function Dashboard(props) {
             titleException={titleException}
             handleOpenGuide={handleOpenGuide}
           >
-            { children }
+            {children}
           </LeftSidebarLayout>
         )
       }
@@ -121,7 +137,7 @@ function Dashboard(props) {
             titleException={titleException}
             handleOpenGuide={handleOpenGuide}
           >
-            { children }
+            {children}
           </LeftSidebarBigLayout>
         )
       }
@@ -142,7 +158,7 @@ function Dashboard(props) {
             titleException={titleException}
             handleOpenGuide={handleOpenGuide}
           >
-            { children }
+            {children}
           </RightSidebarLayout>
         )
       }
@@ -163,7 +179,7 @@ function Dashboard(props) {
             titleException={titleException}
             handleOpenGuide={handleOpenGuide}
           >
-            { children }
+            {children}
           </DropMenuLayout>
         )
       }
@@ -184,7 +200,7 @@ function Dashboard(props) {
             titleException={titleException}
             handleOpenGuide={handleOpenGuide}
           >
-            { children }
+            {children}
           </MegaMenuLayout>
         )
       }

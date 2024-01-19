@@ -18,6 +18,7 @@ import {
 } from 'dan-redux/actions/uiActions';
 import { TemplateSettings } from 'dan-components';
 import applicationTheme from '../../styles/theme/applicationTheme';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
 const styles = {
   root: {
@@ -58,6 +59,9 @@ function ThemeWrapper(props) {
     createTheme(applicationTheme(props.color, props.mode, props.direction))
   );
   const [paletteState, setPalette] = useState([]);
+
+  const location = useLocation();
+  const isAuthPage = location.pathname.includes('login');
 
   const {
     classes,
@@ -170,24 +174,26 @@ function ThemeWrapper(props) {
               barColorPrimary: classes.bar
             }}
           />
-          <TemplateSettings
-            palette={paletteState}
-            selectedValue={color}
-            mode={mode}
-            gradient={gradient}
-            decoration={decoration}
-            bgPosition={bgPosition}
-            layout={layout}
-            direction={direction}
-            changeTheme={handleChangeTheme}
-            changeRandomTheme={handleChangeRandomTheme}
-            changeMode={handleChangeMode}
-            changeGradient={handleChangeGradient}
-            changeDecoration={handleChangeDecoration}
-            changeBgPosition={handleChangeBgPosition}
-            changeLayout={handleChangeLayout}
-            changeDirection={handleChangeDirection}
-          />
+          {!isAuthPage && (
+            <TemplateSettings
+              palette={paletteState}
+              selectedValue={color}
+              mode={mode}
+              gradient={gradient}
+              decoration={decoration}
+              bgPosition={bgPosition}
+              layout={layout}
+              direction={direction}
+              changeTheme={handleChangeTheme}
+              changeRandomTheme={handleChangeRandomTheme}
+              changeMode={handleChangeMode}
+              changeGradient={handleChangeGradient}
+              changeDecoration={handleChangeDecoration}
+              changeBgPosition={handleChangeBgPosition}
+              changeLayout={handleChangeLayout}
+              changeDirection={handleChangeDirection}
+            />
+          )}
           <ThemeContext.Provider value={handleChangeMode}>
             {children}
           </ThemeContext.Provider>

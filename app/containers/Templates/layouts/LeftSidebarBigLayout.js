@@ -40,7 +40,7 @@ function LeftSidebarBigLayout(props) {
         position="left-sidebar-big"
         changeMode={changeMode}
         mode={mode}
-        title={place}
+        title={place.name}
         history={history}
         openGuide={handleOpenGuide}
       />
@@ -61,18 +61,18 @@ function LeftSidebarBigLayout(props) {
         <section className={classNames(classes.mainWrap, classes.sidebarLayout)}>
           {titleException.indexOf(history.location.pathname) < 0 && (
             <div className={classes.pageTitle}>
-              <Typography component="h4" className={bgPosition === 'header' ? classes.darkTitle : classes.lightTitle} variant="h4">{place}</Typography>
+              <Typography component="h4" className={bgPosition === 'header' ? classes.darkTitle : classes.lightTitle} variant="h4">{place.name}</Typography>
               <BreadCrumb separator=" / " theme={bgPosition === 'header' ? 'dark' : 'light'} location={history.location} />
             </div>
           )}
-          { !pageLoaded && (<img src="/images/spinner.gif" alt="spinner" className={classes.circularProgress} />) }
+          {!pageLoaded && (<img src="/images/spinner.gif" alt="spinner" className={classes.circularProgress} />)}
           <Fade
             in={pageLoaded}
             {...(pageLoaded ? { timeout: 700 } : {})}
           >
             <div className={!pageLoaded ? classes.hideApp : ''}>
               {/* Application content will load here */}
-              { children }
+              {children}
             </div>
           </Fade>
         </section>

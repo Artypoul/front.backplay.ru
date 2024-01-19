@@ -1,11 +1,8 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
 import NotFound from 'containers/Pages/Standalone/NotFoundDedicated';
-import Auth from './Auth';
+import { Route, Switch } from 'react-router-dom';
 import Application from './Application';
-import LandingCorporate from './Landing';
-import LandingCreative from './LandingCreative';
-import ArticleNews from './ArticleNews';
+import Auth from './Auth';
 import ThemeWrapper from './ThemeWrapper';
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 
@@ -13,10 +10,7 @@ function App() {
   return (
     <ThemeWrapper>
       <Switch>
-        <Route path="/" exact component={LandingCorporate} />
-        <Route path="/landing-creative" exact component={LandingCreative} />
-        <Route path="/app" component={Application} />
-        <Route path="/blog" component={ArticleNews} />
+        <Route path="/shop" component={Application} />
         <Route component={Auth} />
         <Route component={NotFound} />
       </Switch>

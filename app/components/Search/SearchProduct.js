@@ -57,32 +57,42 @@ function SearchProduct(props) {
   return (
     <div className={classes.root}>
       <AppBar position="static" color="inherit">
-        <Toolbar>
-          <div className={classes.flex}>
-            <div className={classes.wrapper}>
-              <div className={classes.search}>
-                <SearchIcon />
+        <Toolbar style={{
+          justifyContent: 'space-between',
+          gap: 24,
+          minHeight: 'auto',
+          padding: '14px 24px',
+        }}>
+          <div className={classes.left}>
+            <div className={classes.flex}>
+              <div className={classes.wrapper}>
+                <div className={classes.search}>
+                  <SearchIcon />
+                </div>
+                <input className={classes.input} placeholder="Search Product" onChange={(event) => search(event)} />
               </div>
-              <input className={classes.input} placeholder="Search Product" onChange={(event) => search(event)} />
             </div>
+
+            <Typography variant="caption" className={classes.result}>
+              {getTotalResult(dataProduct)} Results
+            </Typography>
           </div>
-          <Typography variant="caption" className={classes.result}>
-            {getTotalResult(dataProduct)}
-            &nbsp;Results
-          </Typography>
-          <Hidden mdDown>
-            <div className={classes.toggleContainer}>
-              <ToggleButtonGroup value={listView} exclusive onChange={handleSwitchView}>
-                <ToggleButton value="grid">
-                  <GridOn />
-                </ToggleButton>
-                <ToggleButton value="list">
-                  <ViewList />
-                </ToggleButton>
-              </ToggleButtonGroup>
-            </div>
-          </Hidden>
-          <div className={classes.cart}>
+
+          <div className={classes.right}>
+            <Hidden mdDown>
+              <div className={classes.toggleContainer}>
+                <ToggleButtonGroup value={listView} exclusive onChange={handleSwitchView}>
+                  <ToggleButton value="grid">
+                    <GridOn />
+                  </ToggleButton>
+                  <ToggleButton value="list">
+                    <ViewList />
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </div>
+            </Hidden>
+          </div>
+          {/* <div className={classes.cart}>
             <IconButton
               color="inherit"
               aria-owns={anchorEl ? 'simple-menu' : null}
@@ -101,7 +111,7 @@ function SearchProduct(props) {
               checkout={checkout}
               totalPrice={totalPrice}
             />
-          </div>
+          </div> */}
         </Toolbar>
       </AppBar>
     </div>

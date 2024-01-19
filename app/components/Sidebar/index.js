@@ -1,13 +1,13 @@
-import React, { useState, useEffect, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
-import Hidden from '@material-ui/core/Hidden';
-import Drawer from '@material-ui/core/Drawer';
-import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import dummy from 'dan-api/dummy/dummyContents';
-import styles from './sidebar-jss';
+import PropTypes from 'prop-types';
+import React, { Fragment, useEffect, useState } from 'react';
 import SidebarContent from './SidebarContent';
+import styles from './sidebar-jss';
 
 function Sidebar(props) {
   const [status, setStatus] = useState(dummy.user.status);

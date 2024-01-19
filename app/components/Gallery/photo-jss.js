@@ -7,8 +7,11 @@ const styles = theme => ({
       columnCount: 3,
     },
     columnGap: '1em',
+    rowGap: '1em',
     columnFill: 'initial',
-    marginTop: 20
+    marginTop: 12,
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(374px, 1fr))',
   },
   item: {
     display: 'inline-block',

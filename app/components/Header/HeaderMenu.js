@@ -176,7 +176,7 @@ function HeaderMenu(props) {
       </div>
       <Hidden mdDown>
         <div>
-          { type === 'mega-menu' ? <MegaMenu dataMenu={dataMenu} /> : <DropListMenu dataMenu={dataMenu} />}
+          {type === 'mega-menu' ? <MegaMenu dataMenu={dataMenu} /> : <DropListMenu dataMenu={dataMenu} />}
         </div>
       </Hidden>
       <Hidden lgUp>

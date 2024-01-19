@@ -68,7 +68,12 @@ const styles = theme => ({
     minWidth: 275,
   },
   cardProduct: {
-    position: 'relative'
+    position: 'relative',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  mediaWrapper: {
+    position: 'relative',
   },
   mediaProduct: {
     height: 0,
@@ -102,9 +107,24 @@ const styles = theme => ({
     right: 20,
     top: -20,
   },
+  buttonPlay: {
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+  },
   buttonAddList: {
     display: 'none',
     marginLeft: 10
+  },
+  buttonWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: '1 1 auto',
+  },
+  addButton: {
+    flex: '1 1 auto',
   },
   title: {
     fontSize: 20,
@@ -128,7 +148,6 @@ const styles = theme => ({
     }
   },
   desc: {
-    height: 45,
     overflow: 'hidden'
   },
   chipDiscount: {

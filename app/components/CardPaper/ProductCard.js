@@ -12,11 +12,15 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Chip from '@material-ui/core/Chip';
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart';
+import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import CreateIcon from '@material-ui/icons/Create';
 import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import Type from 'dan-styles/Typography.scss';
 import Rating from '../Rating/Rating';
 import styles from './cardStyle-jss';
+import { Link, useHistory } from 'react-router-dom';
+import { Box } from '@material-ui/core';
 
 function ProductCard(props) {
   const {
@@ -33,7 +37,31 @@ function ProductCard(props) {
     detailOpen,
     addToCart,
     width,
+    edit,
   } = props;
+
+  const getCardAction = () => {
+    if (edit && !soldout) {
+      return (
+        <Tooltip title="Редактировать трек" placement="top">
+          <Fab onClick={edit} size="medium" color="secondary" aria-label="add" className={classes.buttonAdd}>
+            <CreateIcon />
+          </Fab>
+        </Tooltip>
+      );
+    }
+
+    if (!soldout) {
+      return (
+        <Tooltip title="Купить трек" placement="top">
+          <Fab onClick={addToCart} size="medium" color="secondary" aria-label="add" className={classes.buttonAdd}>
+            <AddShoppingCart />
+          </Fab>
+        </Tooltip>
+      );
+    }
+  };
+
   return (
     <Card className={classNames(classes.cardProduct, isWidthUp('sm', width) && list ? classes.cardList : '')}>
       <div className={classes.status}>
@@ -41,22 +69,23 @@ function ProductCard(props) {
           <Chip label={'Discount ' + discount} className={classes.chipDiscount} />
         )}
         {soldout && (
-          <Chip label="Sold Out" className={classes.chipSold} />
+          <Chip label="Проданно" className={classes.chipSold} />
         )}
       </div>
-      <CardMedia
-        className={classes.mediaProduct}
-        image={thumbnail}
-        title={name}
-      />
+
+      <div className={classes.mediaWrapper}>
+        <Fab size="medium" color="secondary" aria-label="add" className={classes.buttonPlay}>
+          <PlayArrowIcon />
+        </Fab>
+        <CardMedia
+          className={classes.mediaProduct}
+          image={thumbnail}
+          title={name}
+        />
+      </div>
+
       <CardContent className={classes.floatingButtonWrap}>
-        {!soldout && (
-          <Tooltip title="Add to cart" placement="top">
-            <Fab onClick={addToCart} size="small" color="secondary" aria-label="add" className={classes.buttonAdd}>
-              <AddShoppingCart />
-            </Fab>
-          </Tooltip>
-        )}
+        {getCardAction()}
         <Typography noWrap gutterBottom variant="h5" className={classes.title} component="h2">
           {name}
         </Typography>
@@ -68,31 +97,24 @@ function ProductCard(props) {
         </div>
       </CardContent>
       <CardActions className={classes.price}>
-        <Typography variant="h5">
-          <span>
-            $
-            {price}
-          </span>
-        </Typography>
+        <Box fontWeight={600} fontSize={24}>
+          {price && (
+            <span>
+              {price || 0}Р
+            </span>
+          )}
+        </Box>
         {prevPrice > 0 && (
           <Typography variant="caption" component="h5">
             <span className={Type.lineThrought}>
-              $
-              {prevPrice}
+              {prevPrice}P
             </span>
           </Typography>
         )}
         <div className={classes.rightAction}>
           <Button size="small" variant="outlined" color="secondary" onClick={detailOpen}>
-            See Detail
+            Playback Version
           </Button>
-          {!soldout && (
-            <Tooltip title="Add to cart" placement="top">
-              <IconButton color="secondary" onClick={addToCart} className={classes.buttonAddList}>
-                <AddShoppingCart />
-              </IconButton>
-            </Tooltip>
-          )}
         </div>
       </CardActions>
     </Card>

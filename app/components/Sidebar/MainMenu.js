@@ -15,6 +15,7 @@ import Chip from '@material-ui/core/Chip';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import styles from './sidebar-jss';
+import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
 
 const LinkBtn = React.forwardRef(function LinkBtn(props, ref) { // eslint-disable-line
   return <NavLink to={props.to} {...props} innerRef={ref} />; // eslint-disable-line
@@ -32,8 +33,10 @@ function MainMenu(props) {
     classes,
     openSubMenu,
     open,
-    dataMenu
+    dataMenu,
   } = props;
+
+  const location = useLocation();
 
   const getMenus = menuArray => menuArray.map((item, index) => {
     if (item.child || item.linkParent) {
@@ -47,7 +50,8 @@ function MainMenu(props) {
               classNames(
                 classes.head,
                 item.icon ? classes.iconed : '',
-                open.indexOf(item.key) > -1 ? classes.opened : '',
+                // open.indexOf(item.key) > -1 ? classes.opened : '',
+                location.pathname === item.linkParent && classes.opened,
               )
             }
             onClick={() => openSubMenu(item.key, item.keyParent)}
@@ -58,13 +62,13 @@ function MainMenu(props) {
               </ListItemIcon>
             )}
             <ListItemText classes={{ primary: classes.primary }} variant="inset" primary={item.name} />
-            { !item.linkParent && (
+            {!item.linkParent && (
               <span>
-                { open.indexOf(item.key) > -1 ? <ExpandLess /> : <ExpandMore /> }
+                {open.indexOf(item.key) > -1 ? <ExpandLess /> : <ExpandMore />}
               </span>
             )}
           </ListItem>
-          { !item.linkParent && (
+          {!item.linkParent && (
             <Collapse
               component="div"
               className={classNames(
@@ -76,7 +80,7 @@ function MainMenu(props) {
               unmountOnExit
             >
               <List className={classes.dense} component="nav" dense>
-                { getMenus(item.child, 'key') }
+                {getMenus(item.child, 'key')}
               </List>
             </Collapse>
           )}

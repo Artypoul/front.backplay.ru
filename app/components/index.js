@@ -102,6 +102,7 @@ export NewsCard from './CardPaper/NewsCard';
 export HorizontalNewsCard from './CardPaper/HorizontalNewsCard';
 export PlayerCard from './CardPaper/PlayerCard';
 export PostCard from './CardPaper/PostCard';
+export EditProductCard from './CardPaper/EditProductCard';
 export ProductCard from './CardPaper/ProductCard';
 export VideoCard from './CardPaper/VideoCard';
 export IdentityCard from './CardPaper/IdentityCard';
@@ -144,3 +145,6 @@ export AddBoard from './TaskBoard/AddBoard';
 export ErrorWrap from './Error/ErrorWrap';
 // Theme an Layout Settings
 export TemplateSettings from './TemplateSettings';
+
+// Filter
+export Filter from './Filter';

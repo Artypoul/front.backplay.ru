@@ -42,7 +42,7 @@ function SidebarContent(props) {
     openMenuStatus,
     closeMenuStatus,
     changeStatus,
-    isLogin
+    isLogin,
   } = props;
 
   const setStatus = st => {
@@ -119,7 +119,11 @@ function SidebarContent(props) {
           )
         }
       >
-        <MainMenu loadTransition={loadTransition} dataMenu={dataMenu} toggleDrawerOpen={toggleDrawerOpen} />
+        <MainMenu
+          loadTransition={loadTransition}
+          dataMenu={dataMenu}
+          toggleDrawerOpen={toggleDrawerOpen}
+        />
       </div>
     </div>
   );
@@ -143,8 +147,8 @@ SidebarContent.propTypes = {
 
 SidebarContent.defaultProps = {
   turnDarker: false,
-  toggleDrawerOpen: () => {},
-  loadTransition: () => {},
+  toggleDrawerOpen: () => { },
+  loadTransition: () => { },
   anchorEl: null,
   isLogin: true,
 };

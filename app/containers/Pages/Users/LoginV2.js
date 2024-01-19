@@ -11,13 +11,13 @@ import styles from 'dan-components/Forms/user-jss';
 function LoginV2(props) {
   const [valueForm, setValueForm] = useState(null);
 
-  const submitForm = values => {
-    setTimeout(() => {
-      setValueForm(values);
-      console.log(`You submitted:\n\n${valueForm}`);
-      window.location.href = '/app';
-    }, 500); // simulate server latency
-  };
+  // const submitForm = values => {
+  //   setTimeout(() => {
+  //     setValueForm(values);
+  //     console.log(`You submitted:\n\n${valueForm}`);
+  //     window.location.href = '/app';
+  //   }, 500); // simulate server latency
+  // };
 
   const title = brand.name + ' - Login Version 2';
   const description = brand.desc;
@@ -35,15 +35,12 @@ function LoginV2(props) {
       <div className={classes.containerSide}>
         <Hidden smDown>
           <div className={classes.opening}>
-            <Typography variant="h3" component="h1" className={classes.opening} gutterBottom>
-              Welcome to&nbsp;
-              {brand.name}
-            </Typography>
-            <Typography variant="h6" component="p" className={classes.subpening}>Please sign in to continue</Typography>
+            <Typography variant="h3" component="h1" className={classes.opening} gutterBottom>Добро пожаловать в магазин мультитреков</Typography>
+            <Typography variant="h6" component="p" className={classes.subpening}>Авторизуйтесь пожалуйста</Typography>
           </div>
         </Hidden>
         <div className={classes.sideFormWrap}>
-          <LoginFormV2 onSubmit={(values) => submitForm(values)} />
+          <LoginFormV2 />
         </div>
       </div>
     </div>

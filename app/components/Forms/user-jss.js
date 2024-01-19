@@ -76,11 +76,13 @@ const styles = theme => ({
   },
   petal: {
     backgroundImage: theme.palette.type === 'dark' ? `url(${bgLight})` : `url(${bg})`,
+    display: 'flex',
+    flexDirection: 'column'
   },
   icon: {},
   topBar: {
     display: 'flex',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     '& $icon': {
       marginRight: theme.spacing(1)
     },
@@ -112,6 +114,14 @@ const styles = theme => ({
     '& img': {
       width: 30,
       marginRight: 10,
+    },
+  },
+  wrapper: {
+    flex: '1 1 auto',
+    display: 'flex',
+    alignItems: 'center',
+    '& > div': {
+      width: '100%',
     },
   },
   formWrap: {

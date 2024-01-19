@@ -43,7 +43,8 @@ function Application(props) {
     <Dashboard history={history} changeMode={changeMode}>
       <Switch>
         { /* Home */ }
-        <Route exact path="/app" component={PersonalDashboard} />
+        {/* <Route exact path="/app" component={PersonalDashboard} /> */}
+        <Route exact path="/shop" component={Photos} />
         <Route path="/app/dashboard/sales-marketing" component={CrmDashboard} />
         <Route path="/app/dashboard/cryptocurrency" component={CryptoDashboard} />
         { /* Widgets */ }
