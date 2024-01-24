@@ -73,77 +73,89 @@ function getStepContent(step) {
 }
 
 function Checkout(props) {
-  const [activeStep, setActiveStep] = useState(0);
+  // const [activeStep, setActiveStep] = useState(0);
 
-  const handleNext = () => {
-    setActiveStep(activeStep + 1);
-  };
+  // const handleNext = () => {
+  //   setActiveStep(activeStep + 1);
+  // };
 
-  const handleBack = () => {
-    setActiveStep(activeStep - 1);
-  };
+  // const handleBack = () => {
+  //   setActiveStep(activeStep - 1);
+  // };
 
   const { classes, width } = props;
+  
+  const getContent = () => {
+    if (false) {
+      return (
+        <div className={classes.finishMessage}>
+          <Typography variant="h4" gutterBottom>
+            <span>
+              <i className="ion-ios-checkmark-outline" />
+            </span>
+            Thank you for your order.
+          </Typography>
+          <Typography variant="subtitle1">
+            Your order number is&nbsp;
+            <strong>#2001539</strong>
+            .&nbsp;We have emailed your order confirmation, and will
+            send you an update when your order has shipped.
+          </Typography>
+          <Button variant="contained" color="primary" href="/app/pages/ecommerce" className={classes.button}>
+            Shoping Again
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <Fragment>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={7}>
+            {/* <Stepper activeStep={activeStep} className={classes.stepper} alternativeLabel={isWidthDown('sm', width)}>
+              {steps.map(label => (
+                <Step key={label}>
+                  <StepLabel>
+                    {label}
+                  </StepLabel>
+                </Step>
+              ))}
+            </Stepper> */}
+            <AddressForm
+              title='Проверте пожалуйста ваши данные'
+            />
+            {/* {getStepContent(activeStep)} */}
+          </Grid>
+          <Grid item xs={12} md={5}>
+            <SideReview />
+          </Grid>
+        </Grid>
+        <div className={classes.buttons}>
+          {/* {activeStep !== 0 && (
+            <Button onClick={handleBack} className={classes.button}>
+              Back
+            </Button>
+          )} */}
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            size="large"
+          >
+            ГОТОВО
+            {/* {activeStep === steps.length - 1 ? 'Place order' : 'Next'} */}
+          </Button>
+        </div>
+      </Fragment>
+    );
+  }
+
   return (
     <Fragment>
       <CssBaseline />
       <main className={classes.layout}>
         <Paper className={classes.paper}>
-          {activeStep === steps.length ? (
-            <div className={classes.finishMessage}>
-              <Typography variant="h4" gutterBottom>
-                <span>
-                  <i className="ion-ios-checkmark-outline" />
-                </span>
-                Thank you for your order.
-              </Typography>
-              <Typography variant="subtitle1">
-                Your order number is&nbsp;
-                <strong>#2001539</strong>
-                .&nbsp;We have emailed your order confirmation, and will
-                send you an update when your order has shipped.
-              </Typography>
-              <Button variant="contained" color="primary" href="/app/pages/ecommerce" className={classes.button}>
-                Shoping Again
-              </Button>
-            </div>
-          ) : (
-            <Fragment>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={7}>
-                  <Stepper activeStep={activeStep} className={classes.stepper} alternativeLabel={isWidthDown('sm', width)}>
-                    {steps.map(label => (
-                      <Step key={label}>
-                        <StepLabel>
-                          {label}
-                        </StepLabel>
-                      </Step>
-                    ))}
-                  </Stepper>
-                  {getStepContent(activeStep)}
-                </Grid>
-                <Grid item xs={12} md={5}>
-                  <SideReview />
-                </Grid>
-              </Grid>
-              <div className={classes.buttons}>
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} className={classes.button}>
-                    Back
-                  </Button>
-                )}
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleNext}
-                  className={classes.button}
-                  size="large"
-                >
-                  {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
-                </Button>
-              </div>
-            </Fragment>
-          )}
+          {getContent()}
         </Paper>
       </main>
     </Fragment>

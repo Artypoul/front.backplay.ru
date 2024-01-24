@@ -49,24 +49,26 @@ const Filter = (props) => {
 
   return (
     <div className={classes.wrapper}>
-      <Fab size='small'>
+      <Fab size='small' style={{minWidth: 40,}}>
         <IconButton className={classes.iconButton}>
           <FavoriteOutlinedIcon />
         </IconButton>
       </Fab>
 
-      <div className={classes.items}>
-        {filterItems.map((filterItem, index) => (
-          <Button
-            variant='contained'
-            key={filterItem.label}
-            value={filterItem.value}
-            className={`${classes.item} ${index === selectedItemValue && 'active'}`}
-            onClick={changeFilterItems(index)}
-          >
-            {filterItem.label}
-          </Button>
-        ))}
+      <div className={classes.itemsWrapper}>
+        <div className={classes.items}>
+          {filterItems.map((filterItem, index) => (
+            <Button
+              variant='contained'
+              key={filterItem.label}
+              value={filterItem.value}
+              className={`${classes.item} ${index === selectedItemValue && 'active'}`}
+              onClick={changeFilterItems(index)}
+            >
+              {filterItem.label}
+            </Button>
+          ))}
+        </div>
       </div>
       {/* <Select
         autoWidth={true}

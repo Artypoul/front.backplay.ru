@@ -53,6 +53,11 @@ function UserProfile(props) {
     setValue(val);
   };
 
+  const tabContainerData = [
+    <About title='Информация' />,
+    <Favorites />,
+  ];
+
   return (
     <div>
       <Helmet>
@@ -80,9 +85,9 @@ function UserProfile(props) {
             centered
           >
             <Tab icon={<AccountCircle />} />
-            <Tab icon={<SupervisorAccount />} />
+            {/* <Tab icon={<SupervisorAccount />} /> */}
             <Tab icon={<Favorite />} />
-            <Tab icon={<PhotoLibrary />} />
+            {/* <Tab icon={<PhotoLibrary />} />  */}
           </Tabs>
         </Hidden>
         <Hidden smDown>
@@ -94,17 +99,20 @@ function UserProfile(props) {
             textColor="primary"
             centered
           >
-            <Tab icon={<AccountCircle />} label="ABOUT" />
-            <Tab icon={<SupervisorAccount />} label="20 CONNECTIONS" />
-            <Tab icon={<Favorite />} label="18 FAVORITES" />
-            <Tab icon={<PhotoLibrary />} label="4 ALBUMS" />
+            <Tab icon={<AccountCircle />} label="ИНформация" />
+            {/* <Tab icon={<SupervisorAccount />} label="20 CONNECTIONS" /> */}
+            <Tab icon={<Favorite />} label="МОИ ТРЕКИ" />
+            {/* <Tab icon={<PhotoLibrary />} label="4 ALBUMS" /> */}
           </Tabs>
         </Hidden>
       </AppBar>
-      {value === 0 && <TabContainer><About data={dataProps} /></TabContainer>}
+      <TabContainer>
+        {tabContainerData[value]}
+      </TabContainer>
+      {/* {value === 0 && <TabContainer><About data={dataProps} /></TabContainer>}
       {value === 1 && <TabContainer><Connection /></TabContainer>}
-      {value === 2 && <TabContainer><Favorites /></TabContainer>}
-      {value === 3 && <TabContainer><Albums /></TabContainer>}
+      {value === 1 && <TabContainer><Favorites /></TabContainer>}
+      {value === 3 && <TabContainer><Albums /></TabContainer>} */}
     </div>
   );
 }

@@ -32,19 +32,31 @@ const styles = theme => ({
 function AdvFilter(props) {
   const columns = [
     {
-      name: 'Name',
+      name: 'Автор',
       options: {
         filter: true
       }
     },
     {
-      name: 'Title',
+      name: 'Название Исполнитель',
       options: {
         filter: true,
       }
     },
     {
-      name: 'KPI',
+      name: 'Тональность',
+      options: {
+        filter: true
+      }
+    },
+    {
+      name: 'Дата',
+      options: {
+        filter: true,
+      }
+    },
+    {
+      name: 'Прогресс',
       options: {
         filter: false,
         customBodyRender: (value) => (
@@ -53,7 +65,7 @@ function AdvFilter(props) {
       }
     },
     {
-      name: 'Status',
+      name: 'Статус',
       options: {
         filter: true,
         customBodyRender: (value) => {
@@ -68,7 +80,7 @@ function AdvFilter(props) {
       }
     },
     {
-      name: 'Salary',
+      name: 'Сумма',
       options: {
         filter: true,
         customBodyRender: (value) => {
@@ -120,10 +132,12 @@ function AdvFilter(props) {
 
   const options = {
     filterType: 'dropdown',
-    responsive: 'vertical',
+    responsive: 'standard',
     print: true,
     rowsPerPage: 10,
-    page: 0
+    page: 0,
+    filter: true,
+    fullWidth: true,
   };
 
   const { classes } = props;
@@ -131,7 +145,7 @@ function AdvFilter(props) {
   return (
     <div className={classes.table}>
       <MUIDataTable
-        title="Employee list"
+        title="Заказы"
         data={data}
         columns={columns}
         options={options}

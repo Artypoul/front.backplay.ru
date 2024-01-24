@@ -69,6 +69,7 @@ function Rating(props) {
         disabled={disabled}
         onMouseEnter={() => setHoverValue(i)}
         onMouseLeave={() => setHoverValue(value)}
+        style={itemStyle}
         onClick={() => {
           if (!readOnly && onChange) {
             onChange(i);

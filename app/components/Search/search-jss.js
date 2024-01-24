@@ -1,10 +1,12 @@
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: theme.spacing(2, 0, 1.5),
+    marginTop: 16,
+    marginBottom: 32,
     borderRadius: 40,
     overflow: 'hidden',
-    boxShadow: theme.shadows[5]
+    boxShadow: theme.shadows[5],
+    backgroundColor: theme.palette.common.white,
   },
   flex: {
     flex: 1,

@@ -148,3 +148,6 @@ export TemplateSettings from './TemplateSettings';
 
 // Filter
 export Filter from './Filter';
+
+// Player
+export Player from './Player';

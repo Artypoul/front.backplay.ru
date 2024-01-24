@@ -164,6 +164,19 @@ const styles = theme => ({
   subheader: {
     width: '100%',
   },
+  background: {
+    backgroundColor: theme.palette.common.white,
+    padding: 24,
+    borderRadius: 8,
+  },
+  wrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 20,
+  },
+  ready: {
+    alignSelf: 'center',
+  },
 });
 
 export default styles;

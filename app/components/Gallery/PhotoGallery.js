@@ -34,9 +34,7 @@ function PhotoGallery(props) {
       <Filter />
 
       <div className={classes.masonry}>
-        {isAuthor && (
-          <EditProductCard />
-        )}
+        <EditProductCard />
 
         {imgData.map((thumb, index) => (
           <ProductCard
@@ -49,6 +47,7 @@ function PhotoGallery(props) {
             prevPrice={thumb.prevPrice}
             soldout={thumb.soldout}
             addToCart={addToCart(thumb)}
+            edit={() => {}}
           />
         ))}
       </div>

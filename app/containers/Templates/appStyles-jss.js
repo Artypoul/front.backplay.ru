@@ -54,7 +54,7 @@ const styles = theme => ({
   },
   content: {
     width: '100%',
-    padding: theme.spacing(2),
+    padding: `${theme.spacing(2)}px ${theme.spacing(2)}px 83px`,
     minHeight: '100%',
     overflow: 'hidden',
     [theme.breakpoints.down('md')]: {

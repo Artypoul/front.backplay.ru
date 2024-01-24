@@ -10,6 +10,7 @@ import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
+import cardBg from 'dan-images/utils/editCardBg.svg';
 import styles from './cardStyle-jss';
 
 function EditProductCard(props) {
@@ -60,7 +61,7 @@ function EditProductCard(props) {
         </Fab>
         <CardMedia
           className={classes.mediaProduct}
-          image='http://via.placeholder.com/1050x700/E040FB/FFFFFF/'
+          image={cardBg}
           title='background'
         />
       </div>

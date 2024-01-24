@@ -12,6 +12,7 @@ import {
 import dataMenu from 'dan-api/ui/menu';
 import Decoration from '../Decoration';
 import styles from '../appStyles-jss';
+import Player from '../../../components/Player';
 
 function LeftSidebarLayout(props) {
   const {
@@ -31,6 +32,9 @@ function LeftSidebarLayout(props) {
     titleException,
     handleOpenGuide
   } = props;
+
+  const isBreadCrumbsShown = !place.path.includes('profile');
+
   return (
     <Fragment>
       <Header
@@ -60,10 +64,12 @@ function LeftSidebarLayout(props) {
           horizontalMenu={false}
         />
         <section className={classNames(classes.mainWrap, classes.sidebarLayout)}>
-          <div className={classes.pageTitle}>
-            <Typography component="h4" className={bgPosition === 'header' ? classes.darkTitle : classes.lightTitle} variant="h4">{place.name}</Typography>
-            <BreadCrumb separator=" / " theme={bgPosition === 'header' ? 'dark' : 'light'} location={history.location} />
-          </div>
+          {isBreadCrumbsShown && (
+            <div className={classes.pageTitle}>
+              <Typography component="h4" className={bgPosition === 'header' ? classes.darkTitle : classes.lightTitle} variant="h4">{place.name}</Typography>
+              <BreadCrumb separator=" / " theme={bgPosition === 'header' ? 'dark' : 'light'} location={history.location} />
+            </div>
+          )}
           {!pageLoaded && (<img src="/images/spinner.gif" alt="spinner" className={classes.circularProgress} />)}
           <Fade
             in={pageLoaded}
@@ -72,6 +78,8 @@ function LeftSidebarLayout(props) {
             <div className={!pageLoaded ? classes.hideApp : ''}>
               {/* Application content will load here */}
               {children}
+
+              <Player />
             </div>
           </Fade>
         </section>

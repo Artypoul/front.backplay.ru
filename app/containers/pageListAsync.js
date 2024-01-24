@@ -78,7 +78,7 @@ export const SimpleTable = loadable(() =>
     fallback: <Loading />,
   });
 export const AdvancedTable = loadable(() =>
-  import ('./Tables/AdvancedTable'), {
+  import ('./Tables/demos/AdvFilter'), {
     fallback: <Loading />,
   });
 export const TreeTable = loadable(() =>
@@ -338,7 +338,8 @@ export const Ecommerce = loadable(() =>
     fallback: <Loading />,
   });
 export const ProductPage = loadable(() =>
-  import ('./SampleApps/Ecommerce/ProductPage'), {
+  // import ('./SampleApps/Ecommerce/ProductPage'), {
+  import ('./Pages/Product'), {
     fallback: <Loading />,
   });
 export const CheckoutPage = loadable(() =>

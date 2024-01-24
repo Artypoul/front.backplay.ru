@@ -96,11 +96,20 @@ const styles = theme => ({
       marginLeft: 'auto',
       display: 'flex',
       alignItems: 'center'
-    }
+    },
+  },
+  actionButton: {
+    padding: '8px 16px',
+    border: `1px solid ${theme.palette.secondary.main}`,
+    borderRadius: 18,
+    textTransform: 'uppercase',
+    fontSize: 13,
+    fontWeight: 600,
+    color: theme.palette.secondary.main,
   },
   floatingButtonWrap: {
     position: 'relative',
-    paddingTop: 50
+    paddingTop: 24,
   },
   buttonAdd: {
     position: 'absolute',

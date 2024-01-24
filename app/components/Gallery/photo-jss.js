@@ -6,12 +6,14 @@ const styles = theme => ({
     [theme.breakpoints.up('md')]: {
       columnCount: 3,
     },
-    columnGap: '1em',
-    rowGap: '1em',
+    gap: 12,
     columnFill: 'initial',
-    marginTop: 12,
+    marginTop: 24,
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(374px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(347px, 1fr))',
+    [theme.breakpoints.down('xs')]: {
+      gridTemplateColumns: 'repeat(auto-fit, minmax(309px, 1fr))',
+    },
   },
   item: {
     display: 'inline-block',

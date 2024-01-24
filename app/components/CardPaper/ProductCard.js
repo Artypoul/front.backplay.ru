@@ -106,15 +106,18 @@ function ProductCard(props) {
         </Box>
         {prevPrice > 0 && (
           <Typography variant="caption" component="h5">
-            <span className={Type.lineThrought}>
+            <span>
               {prevPrice}P
             </span>
           </Typography>
         )}
         <div className={classes.rightAction}>
-          <Button size="small" variant="outlined" color="secondary" onClick={detailOpen}>
+          <Typography variant="caption" component="h5" className={classes.actionButton}>
             Playback Version
-          </Button>
+          </Typography>
+          {/* <Button size="small" variant="outlined" color='secondary'>
+            Playback Version
+          </Button> */}
         </div>
       </CardActions>
     </Card>

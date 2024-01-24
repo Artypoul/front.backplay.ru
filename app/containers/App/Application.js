@@ -60,8 +60,8 @@ function Application(props) {
         <Route path="/app/layouts/responsive" component={Responsive} />
         { /* Table */ }
         <Route exact path="/app/tables" component={Parent} />
-        <Route path="/app/tables/basic-table" component={SimpleTable} />
-        <Route path="/app/tables/data-table" component={AdvancedTable} />
+        <Route path="/shop/tables/basic-table" component={SimpleTable} />
+        <Route path="/shop/orders" component={AdvancedTable} />
         <Route path="/app/tables/table-playground" component={TablePlayground} />
         <Route path="/app/tables/tree-table" component={TreeTable} />
         <Route path="/app/tables/editable-cell" component={EditableCell} />
@@ -119,30 +119,32 @@ function Application(props) {
         <Route path="/app/charts/area-filled-charts" component={AreaFilledChart} />
         <Route path="/app/charts/radar-polar-chart" component={RadarPolarCharts} />
         { /* Sample Apps */ }
-        <Route path="/app/pages/checkout" component={CheckoutPage} />
-        <Route path="/app/pages/product-detail" component={ProductPage} />
+        <Route path="/shop/checkout" component={CheckoutPage} />
+        <Route path="/shop/pages/product-detail" component={ProductPage} />
+        <Route path="/shop/product/:id" component={ProductPage} />
+        <Route path="/shop/product/create" component={ProductPage} />
         <Route path="/app/pages/invoice" component={Invoice} />
         <Route path="/app/pages/taskboard" component={TaskBoard} />
         <Route path="/app/pages/calendar" component={Calendar} />
-        <Route path="/app/pages/chat" component={Chat} />
-        <Route path="/app/pages/contact" component={Contact} />
-        <Route path="/app/pages/ecommerce" component={Ecommerce} />
-        <Route path="/app/pages/timeline" component={Timeline} />
-        <Route path="/app/pages/email" component={Email} />
+        <Route path="/shop/chat" component={Chat} />
+        <Route path="/shop/pages/contact" component={Contact} />
+        <Route path="/shop/pages/ecommerce" component={Ecommerce} />
+        <Route path="/shop/pages/timeline" component={Timeline} />
+        <Route path="/shop/pages/email" component={Email} />
         { /* Pages */ }
         <Route exact path="/app/pages" component={Parent} />
-        <Route path="/app/pages/user-profile" component={Profile} />
-        <Route path="/app/pages/blank-page" component={BlankPage} />
-        <Route path="/app/blank-single" component={BlankPage} />
+        <Route path="/shop/profile" component={Profile} />
+        <Route path="/shop/pages/blank-page" component={BlankPage} />
+        <Route path="/shop/blank-single" component={BlankPage} />
         <Route path="/app/pages/photo-gallery" component={Photos} />
-        <Route path="/app/pages/pricing" component={Pricing} />
+        <Route path="/shop/pages/pricing" component={Pricing} />
         <Route path="/app/pages/not-found" component={NotFound} />
         <Route path="/app/pages/error" component={Error} />
-        <Route path="/app/pages/settings" component={Settings} />
-        <Route path="/app/pages/help-support" component={HelpSupport} />
+        <Route path="/shop/pages/settings" component={Settings} />
+        <Route path="/shop/pages/help-support" component={HelpSupport} />
         { /* Map */ }
         <Route exact path="/app/maps" component={Parent} />
-        <Route path="/app/maps/map-marker" component={MapMarker} />
+        <Route path="/shop/maps/map-marker" component={MapMarker} />
         <Route path="/app/maps/map-direction" component={MapDirection} />
         <Route path="/app/maps/map-searchbox" component={SearchMap} />
         <Route path="/app/maps/map-traffic" component={TrafficIndicator} />

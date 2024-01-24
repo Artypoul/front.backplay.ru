@@ -851,10 +851,10 @@ module.exports = [{
   key: 'orders',
   name: 'Заказы',
   icon: 'ion-ios-flag-outline',
-  linkParent: '/orders',
+  linkParent: '/shop/orders',
 }, {
   key: 'chat',
   name: 'Чат',
   icon: 'ion-ios-color-wand-outline',
-  linkParent: '/chat',
+  linkParent: '/shop/chat',
 }];

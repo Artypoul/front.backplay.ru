@@ -18,13 +18,25 @@ const places = {
     name: 'Магазин',
     path: '/shop',
   },
-  '/ordes': {
+  '/shop/orders': {
     name: 'Заказы',
     path: '/ordes',
   },
-  '/chat': {
+  '/shop/chat': {
     path: '/chat',
     name: 'Чат',
+  },
+  '/shop/product/create': {
+    path: '/shop/product/create',
+    name: 'Добавление нового проекта',
+  },
+  '/shop/checkout': {
+    path: '/shop/checkout',
+    name: 'Оформление заказа',
+  },
+  '/shop/profile': {
+    path: '/shop/profile',
+    name: '',
   },
 };
 
@@ -86,7 +98,9 @@ function Dashboard(props) {
   const titleException = ['/app', '/app/crm-dashboard', '/app/crypto-dashboard'];
   const parts = history.location.pathname.split('/');
   // const place = parts[parts.length - 1].replace('-', ' ');
-  const place = places[history.location.pathname];
+  const place = places[history.location.pathname] || {
+    name: 'default',
+  };
   return (
     <div
       style={{ minHeight: appHeight }}
