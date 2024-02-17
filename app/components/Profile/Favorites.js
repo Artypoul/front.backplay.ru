@@ -11,6 +11,8 @@ import PostCard from '../CardPaper/PostCard';
 import imgData from 'dan-api/images/imgDataMasonry';
 import { ProductCard, EditProductCard } from 'dan-components';
 import Quote from '../Quote/Quote';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useSelector } from 'react-redux';
 
 const styles = theme => ({
   divider: {
@@ -29,23 +31,51 @@ const styles = theme => ({
 });
 
 function Favorites(props) {
-  const { classes } = props;
-  const bull = <span className={classes.bullet}>•</span>;
+  const {
+    classes,
+    items,
+  } = props;
+
+  const history = useHistory();
+  const {
+    isAdmin,
+  } = useSelector(state => state.user);
+
+  const addToCart = (item) => {
+    return async () => {
+      console.log('item', item);
+    };
+  };
+
+  const editItem = (projectID) => {
+    return () => {
+      history.push(`/shop/projects/${projectID}/edit`);
+    };
+  };
+
+  const handleOpenItem = (projectID) => {
+    return () => history.push(`/shop/projects/${projectID}`);
+  };
+  
   return (
     <div className={classes.masonry}>
-      <EditProductCard />
+      {/* <EditProductCard /> */}
 
-      {imgData.map((thumb, index) => (
+      {(items || []).map((item, index) => (
         <ProductCard
           key={index}
-          thumbnail={thumb.img}
-          name={thumb.title}
-          desc={thumb.desc}
-          ratting={thumb.ratting}
-          price={thumb.price}
-          prevPrice={thumb.prevPrice}
-          soldout={thumb.soldout}
-          // addToCart={addToCart(thumb)}
+          thumbnail={item.preview.path}
+          name={item.name}
+          desc={item.singer}
+          ratting={item.rate}
+          price={item.price}
+          prevPrice={item.price_without_bass}
+          soldout={item.soldout}
+          addToCart={addToCart(item)}
+          edit={editItem(item.id)}
+          open={handleOpenItem(item.id)}
+          isAdmin={isAdmin}
+          demo={item.demo}
         />
       ))}
     </div>

@@ -39,7 +39,8 @@ function ContactList(props) {
   const favoriteData = dataContact.filter(item => item.favorited === true);
   const getItem = dataArray => dataArray.map(data => {
     const index = dataContact.indexOf(data);
-    if (data.name.toLowerCase().indexOf(keyword) === -1) {
+    const name = `${data.first_name} ${data.last_name}`;
+    if (name.toLowerCase().indexOf(keyword) === -1) {
       return false;
     }
     return (
@@ -50,9 +51,9 @@ function ContactList(props) {
         onClick={() => showDetail(data)}
       >
         <ListItemAvatar>
-          <Avatar alt={data.name} src={data.avatar} className={classes.avatar} />
+          <Avatar alt={data.name} src={data.avatar && data.avatar.path} className={classes.avatar} />
         </ListItemAvatar>
-        <ListItemText primary={data.name} secondary={data.title} />
+        <ListItemText primary={name} secondary={data.role.id === 3 ? 'Пользователь' : 'Автор'} />
       </ListItem>
     );
   });

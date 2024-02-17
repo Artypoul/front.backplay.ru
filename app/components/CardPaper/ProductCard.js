@@ -21,6 +21,8 @@ import Rating from '../Rating/Rating';
 import styles from './cardStyle-jss';
 import { Link, useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { AddMusic } from '../../redux/actions/player';
 
 function ProductCard(props) {
   const {
@@ -38,10 +40,15 @@ function ProductCard(props) {
     addToCart,
     width,
     edit,
+    isAdmin,
+    open,
+    demo,
   } = props;
 
+  const dispatch = useDispatch();
+
   const getCardAction = () => {
-    if (edit && !soldout) {
+    if ((edit && isAdmin) && !soldout) {
       return (
         <Tooltip title="Редактировать трек" placement="top">
           <Fab onClick={edit} size="medium" color="secondary" aria-label="add" className={classes.buttonAdd}>
@@ -62,6 +69,13 @@ function ProductCard(props) {
     }
   };
 
+  const onPlayArrowClick = () => {
+    demo.singer = desc;
+    dispatch(AddMusic(demo));
+  };
+  
+  const onTitleClick = () => open();
+
   return (
     <Card className={classNames(classes.cardProduct, isWidthUp('sm', width) && list ? classes.cardList : '')}>
       <div className={classes.status}>
@@ -74,7 +88,7 @@ function ProductCard(props) {
       </div>
 
       <div className={classes.mediaWrapper}>
-        <Fab size="medium" color="secondary" aria-label="add" className={classes.buttonPlay}>
+        <Fab size="medium" color="secondary" aria-label="add" className={classes.buttonPlay} onClick={onPlayArrowClick}>
           <PlayArrowIcon />
         </Fab>
         <CardMedia
@@ -86,7 +100,7 @@ function ProductCard(props) {
 
       <CardContent className={classes.floatingButtonWrap}>
         {getCardAction()}
-        <Typography noWrap gutterBottom variant="h5" className={classes.title} component="h2">
+        <Typography noWrap gutterBottom variant="h5" className={classes.title} component="h2" onClick={onTitleClick}>
           {name}
         </Typography>
         <Typography component="p" className={classes.desc}>

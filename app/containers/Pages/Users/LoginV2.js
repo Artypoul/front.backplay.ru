@@ -7,17 +7,27 @@ import Hidden from '@material-ui/core/Hidden';
 import { withStyles } from '@material-ui/core/styles';
 import { LoginFormV2 } from 'dan-components';
 import styles from 'dan-components/Forms/user-jss';
+import { useHistory } from 'react-router-dom';
+import { LoginRequest, SendPasswordRequest } from './api';
+import { useDispatch } from 'react-redux';
+import { userInit } from '../../../redux/actions/user';
 
 function LoginV2(props) {
-  const [valueForm, setValueForm] = useState(null);
+  const history = useHistory()
+  
+  const dispatch = useDispatch()
 
-  // const submitForm = values => {
-  //   setTimeout(() => {
-  //     setValueForm(values);
-  //     console.log(`You submitted:\n\n${valueForm}`);
-  //     window.location.href = '/app';
-  //   }, 500); // simulate server latency
-  // };
+  const submitForm = async (values) => {
+    const {
+      message,
+      user,
+    } = await LoginRequest(values)
+
+    if (user) {
+      dispatch(userInit(user));
+      history.push('/shop');
+    }
+  };
 
   const title = brand.name + ' - Login Version 2';
   const description = brand.desc;
@@ -40,7 +50,10 @@ function LoginV2(props) {
           </div>
         </Hidden>
         <div className={classes.sideFormWrap}>
-          <LoginFormV2 />
+          <LoginFormV2
+            formAction={submitForm}
+            sendPassword={SendPasswordRequest}
+          />
         </div>
       </div>
     </div>

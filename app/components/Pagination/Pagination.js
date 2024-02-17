@@ -136,7 +136,7 @@ function Pagination(props) {
   const { totpages } = props;
   const [totalPages] = useState(totpages);
 
-  const hide = true;
+  const hide = false;
   const {
     classes,
     curpage,
@@ -149,8 +149,8 @@ function Pagination(props) {
   } = props;
   return (
     <div className={classes.paging}>
-      <FirstPageLink isDisabled={curpage <= 1} onClick={onGoFirst} />
-      <PreviousPageLink isDisabled={curpage <= 1} onClick={onPrev} />
+      {/* <FirstPageLink isDisabled={curpage <= 1} onClick={onGoFirst} />
+      <PreviousPageLink isDisabled={curpage <= 1} onClick={onPrev} /> */}
       <Hidden xsDown>
         <UltmPagination
           currentPage={curpage}
@@ -161,8 +161,8 @@ function Pagination(props) {
           {...rest}
         />
       </Hidden>
-      <NextPageLink isDisabled={curpage >= totalPages} onClick={onNext} />
-      <LastPageLink isDisabled={curpage >= totalPages} onClick={onGoLast} />
+      {/* <NextPageLink isDisabled={curpage >= totalPages} onClick={onNext} />
+      <LastPageLink isDisabled={curpage >= totalPages} onClick={onGoLast} /> */}
     </div>
   );
 }

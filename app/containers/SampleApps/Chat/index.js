@@ -16,6 +16,7 @@ import {
 import { fetchAction, searchAction } from '../Contact/reducers/contactActions';
 import contactData from '../Contact/api/contactData';
 import chatData from './api/chatData';
+import { GetChats } from './api/getChats';
 
 function Chat(props) {
   // Redux State
@@ -26,17 +27,26 @@ function Chat(props) {
   const keyword = useSelector(state => state.contact.keywordValue);
 
   // Dispatcher
-  const fetchContactData = useDispatch();
-  const fetchChatData = useDispatch();
-  const hideDetail = useDispatch();
-  const showDetail = useDispatch();
-  const search = useDispatch();
-  const sendMessage = useDispatch();
-  const remove = useDispatch();
+  const dispatch = useDispatch();
+  // const fetchContactData = useDispatch();
+  // const fetchChatData = useDispatch();
+  // const hideDetail = useDispatch();
+  // const showDetail = useDispatch();
+  // const search = useDispatch();
+  // const sendMessage = useDispatch();
+  // const remove = useDispatch();
+
+  const getChats = async () => {
+    const chats = await GetChats();
+    console.log('chats', chats);
+
+    // dispatch(fetchChatAction(chats));
+    dispatch(fetchAction(chats));
+  };
+  console.log('dataContact', dataContact, contactData)
 
   useEffect(() => {
-    fetchChatData(fetchChatAction(chatData));
-    fetchContactData(fetchAction(contactData));
+    getChats();
   }, []);
 
   const title = brand.name + ' - Chat App';
@@ -58,19 +68,19 @@ function Chat(props) {
           total={dataContact.length}
           itemSelected={chatSelected}
           dataContact={dataContact}
-          showDetail={(payload) => showDetail(showChatAction(payload))}
-          search={(payload) => search(searchAction(payload))}
+          showDetail={(payload) => dispatch(showChatAction(payload))}
+          search={(payload) => dispatch(searchAction(payload))}
           keyword={keyword}
         />
-        <ChatRoom
+        {/* <ChatRoom
           showMobileDetail={showMobileDetail}
           dataChat={dataChat}
           chatSelected={chatSelected}
           dataContact={dataContact}
-          sendMessage={(payload) => sendMessage(sendAction(payload))}
-          remove={() => remove(deleteAction)}
-          hideDetail={() => hideDetail(hideDetailAction)}
-        />
+          sendMessage={(payload) => dispatch(sendAction(payload))}
+          remove={() => dispatch(deleteAction)}
+          hideDetail={() => dispatch(hideDetailAction)}
+        /> */}
       </div>
     </div>
   );

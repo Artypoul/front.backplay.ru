@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -35,83 +35,130 @@ import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import styles from './profile-jss';
+import { reduxForm, Field, } from 'redux-form';
+import { connect, useDispatch, useSelector } from 'react-redux';
+import { TextFieldRedux } from './textFieldRedux';
+import { UpdateUserHandler } from './api';
+import { userInit } from '../../redux/actions/user';
+import { aboutInit } from '../../redux/actions/about';
 
 function About(props) {
-  const { classes, data, title } = props;
+  const {
+    classes,
+    data,
+    title,
+    handleSubmit,
+    pristine,
+    submitting,
+  } = props;
+
+  const dispatch = useDispatch();
+
+  const {
+    user,
+  } = useSelector(state => state.user);
+
+  const onSubmitHandler = async (values) => {
+    const result = await UpdateUserHandler(user.id, values);
+    if (result.user) {
+      dispatch(userInit(result.user));
+    }
+  };
+
+  useEffect(() => {
+    const data = {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      address: user.address,
+      phone: user.phone,
+      seller_name: user.seller_name,
+      brand_name: user.brand_name,
+    };
+
+    dispatch(aboutInit(data));
+  }, []);
+
   return (
     <div className={classes.background}>
-      <div className={classes.wrapper}>
+      <form className={classes.wrapper} onSubmit={handleSubmit(onSubmitHandler)}>
         <div className={classes.inner}>
           <Typography variant="h6" gutterBottom>
             {title}
           </Typography>
           <Grid container spacing={3}>
-            {/* {fields.map((field, index) => (
-            ))} */}
             <Grid item xs={12} sm={6}>
-              <TextField
+              <Field
+                name='last_name'
+                component={TextFieldRedux}
+                type='text'
+                label='Фамилия'
+                placeholder='Фамилия'
                 required
-                id="firstName"
-                name="firstName"
-                label="First name"
                 fullWidth
-                autoComplete="fname"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
+              <Field
+                name='first_name'
+                component={TextFieldRedux}
+                type='text'
+                label='Имя'
+                placeholder='Имя'
                 required
-                id="lastName"
-                name="lastName"
-                label="Last name"
                 fullWidth
-                autoComplete="lname"
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <Field
+                name='address'
+                component={TextFieldRedux}
+                type='text'
+                label='Адрес'
+                placeholder='Адрес'
                 required
-                id="address1"
-                name="address1"
-                label="Address line 1"
                 fullWidth
-                autoComplete="billing address-line1"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                id="city"
-                name="city"
-                label="City"
+              <Field
+                name={user.role.id === 2 ? 'seller_name' : 'brand_name'}
+                component={TextFieldRedux}
+                type='text'
+                label='Название коллектива'
+                placeholder='Название коллектива'
                 fullWidth
-                autoComplete="billing address-level2"
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField id="state" name="state" label="State/Province/Region" fullWidth />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
+              <Field
+                name='phone'
+                component={TextFieldRedux}
+                type='text'
+                label='Телефон'
+                placeholder='Телефон'
                 required
-                id="address1"
-                name="address1"
-                label="Address line 1"
                 fullWidth
-                autoComplete="billing address-line1"
               />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
+                control={<Checkbox required color="secondary" name="saveAddress" value="yes" />}
                 label="Согласен на обработку персональных данных"
               />
             </Grid>
           </Grid>
         </div>
 
-        <Button variant='contained' color='secondary' className={classes.ready}>ГОТОВО</Button>
-      </div>
+        <Button
+          type='submit'
+          variant='contained'
+          color='secondary'
+          className={classes.ready}
+          disabled={submitting}
+        >
+          ГОТОВО
+        </Button>
+      </form>
     </div>
   );
 }
@@ -121,4 +168,15 @@ About.propTypes = {
   data: PropTypes.array.isRequired
 };
 
-export default withStyles(styles)(About);
+const AboutReduxForm = reduxForm({
+  form: 'about',
+  enableReinitialize: true,
+})(About);
+
+const AboutInit = connect(
+  state => ({
+    initialValues: state.about.userData,
+  })
+)(AboutReduxForm);
+
+export default withStyles(styles)(AboutInit);

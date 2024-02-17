@@ -18,7 +18,7 @@ import {
 } from 'dan-redux/actions/uiActions';
 import { TemplateSettings } from 'dan-components';
 import applicationTheme from '../../styles/theme/applicationTheme';
-import { useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import { useLocation, useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const styles = {
   root: {
@@ -61,6 +61,7 @@ function ThemeWrapper(props) {
   const [paletteState, setPalette] = useState([]);
 
   const location = useLocation();
+  const history = useHistory();
   const isAuthPage = location.pathname.includes('login');
 
   const {
@@ -87,6 +88,11 @@ function ThemeWrapper(props) {
         return Math.min(oldProgress + diff, 100);
       });
     }, 500);
+
+    const token = localStorage.getItem('token');
+    if (!token) {
+      history.push('/login');
+    }
 
     return () => {
       clearInterval(timer);

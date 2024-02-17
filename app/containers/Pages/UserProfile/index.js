@@ -13,7 +13,7 @@ import Favorite from '@material-ui/icons/Favorite';
 import PhotoLibrary from '@material-ui/icons/PhotoLibrary';
 import { withStyles } from '@material-ui/core/styles';
 import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import {
   Cover,
   About,
@@ -25,6 +25,8 @@ import bgCover from 'dan-images/petal_bg.svg';
 import styles from 'dan-components/SocialMedia/jss/cover-jss';
 import data from '../../SampleApps/Timeline/api/timelineData';
 import { fetchAction } from '../../SampleApps/Timeline/reducers/timelineActions';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { GetUserProjects } from './api';
 
 function TabContainer(props) {
   const { children } = props;
@@ -42,12 +44,20 @@ TabContainer.propTypes = {
 function UserProfile(props) {
   const title = brand.name + ' - Profile';
   const description = brand.desc;
-  const { dataProps, classes, fetchData } = props;
-  const [value, setValue] = useState(0);
 
-  useEffect(() => {
-    fetchData(data);
-  }, [fetchData, data]);
+  const { 
+    classes,
+  } = props;
+
+  const [value, setValue] = useState(0);
+  const [projects, setProjects] = useState([]);
+
+  const history = useHistory();
+
+  const {
+    user,
+    isAdmin,
+  } = useSelector(state => state.user);
 
   const handleChange = (event, val) => {
     setValue(val);
@@ -55,8 +65,26 @@ function UserProfile(props) {
 
   const tabContainerData = [
     <About title='Информация' />,
-    <Favorites />,
+    <Favorites items={projects} />,
   ];
+
+  const buttonActionHandler = () => {
+    history.push('/shop/chat');
+  };
+
+  const getUserPorjects = async () => {
+    const projects = await GetUserProjects(user.id);
+    
+    if (projects && projects.data) {
+      setProjects(projects.data);
+    }
+  };
+
+  useEffect(() => {
+    if (value) {
+      getUserPorjects();
+    }
+  }, [value]);
 
   return (
     <div>
@@ -70,9 +98,13 @@ function UserProfile(props) {
       </Helmet>
       <Cover
         coverImg={bgCover}
-        avatar={dummy.user.avatar}
-        name={dummy.user.name}
-        desc="Consectetur adipiscing elit."
+        avatar={user.avatar && user.avatar.path}
+        name={`${user.first_name} ${user.last_name}`}
+        desc={isAdmin ? 'Автор' : 'Пользователь'}
+        button={isAdmin && {
+          title: 'НАписать',
+          action: buttonActionHandler,
+        }}
       />
       <AppBar position="static" className={classes.profileTab}>
         <Hidden mdUp>
@@ -85,9 +117,7 @@ function UserProfile(props) {
             centered
           >
             <Tab icon={<AccountCircle />} />
-            {/* <Tab icon={<SupervisorAccount />} /> */}
             <Tab icon={<Favorite />} />
-            {/* <Tab icon={<PhotoLibrary />} />  */}
           </Tabs>
         </Hidden>
         <Hidden smDown>
@@ -100,27 +130,19 @@ function UserProfile(props) {
             centered
           >
             <Tab icon={<AccountCircle />} label="ИНформация" />
-            {/* <Tab icon={<SupervisorAccount />} label="20 CONNECTIONS" /> */}
             <Tab icon={<Favorite />} label="МОИ ТРЕКИ" />
-            {/* <Tab icon={<PhotoLibrary />} label="4 ALBUMS" /> */}
           </Tabs>
         </Hidden>
       </AppBar>
       <TabContainer>
         {tabContainerData[value]}
       </TabContainer>
-      {/* {value === 0 && <TabContainer><About data={dataProps} /></TabContainer>}
-      {value === 1 && <TabContainer><Connection /></TabContainer>}
-      {value === 1 && <TabContainer><Favorites /></TabContainer>}
-      {value === 3 && <TabContainer><Albums /></TabContainer>} */}
     </div>
   );
 }
 
 UserProfile.propTypes = {
   classes: PropTypes.object.isRequired,
-  dataProps: PropTypes.array.isRequired,
-  fetchData: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({

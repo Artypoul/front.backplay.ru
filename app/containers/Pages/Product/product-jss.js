@@ -169,8 +169,10 @@ export const styles = theme => ({
     gap: 20,
   },
   top: {
-    display: 'flex',
+    display: 'grid',
     alignItems: 'center',
+    // gridTemplateColumns: 'repeat(auto-fit, minmax(50px, 1fr))',
+    gridTemplateColumns: 'repeat(6, 1fr)',
     gap: 16,
     [theme.breakpoints.down('sm')]: {
       display: 'grid',

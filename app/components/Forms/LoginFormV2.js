@@ -11,9 +11,10 @@ import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import classNames from 'classnames';
 import brand from 'dan-api/dummy/brand';
 import logo from 'dan-images/logo.svg';
+import { Notification } from 'dan-components';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { NavLink, useHistory } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import { TextFieldRedux } from './ReduxFormMUI';
@@ -30,8 +31,7 @@ const email = value => (
 function LoginFormV2(props) {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-  const history = useHistory();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleClickShowPassword = () => {
     setShowPassword(show => !show);
@@ -41,55 +41,6 @@ function LoginFormV2(props) {
     event.preventDefault();
   };
 
-  const getFormContent = () => {
-    if (!showPasswordForm) {
-      return (
-        <div >
-          <FormControl className={classes.formControl}>
-            <Field
-              name="email"
-              component={TextFieldRedux}
-              placeholder="Your Email"
-              label="Your Email"
-              required
-              validate={[required, email]}
-              className={classes.field}
-            />
-          </FormControl>
-        </div >
-      );
-    }
-
-    return (
-      <div>
-        <FormControl className={classes.formControl}>
-          <Field
-            name="password"
-            component={TextFieldRedux}
-            type={showPassword ? 'text' : 'password'}
-            label="Your Password"
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="Toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              )
-            }}
-            required
-            validate={required}
-            className={classes.field}
-          />
-        </FormControl>
-      </div>
-    );
-  };
-
   const submitHandler = async (values) => {
     const {
       email,
@@ -97,11 +48,20 @@ function LoginFormV2(props) {
     } = values;
 
     if (!password) {
-      setShowPasswordForm(true);
+      const {
+        isSuccess,
+        message,
+      } = await sendPassword(email)
+
+      if (isSuccess) {
+        setShowPasswordForm(true);
+      }
+
+      setErrorMessage(message)
       return;
     }
 
-    history.push('/shop');
+    formAction(values)
   };
 
   const {
@@ -110,33 +70,86 @@ function LoginFormV2(props) {
     pristine,
     submitting,
     deco,
+    formAction,
+    sendPassword,
   } = props;
+
+  const getFormContent = () => {
+    if (!showPasswordForm) {
+      return (
+        <div >
+          <FormControl className={ classes.formControl }>
+            <Field
+              name="email"
+              component={ TextFieldRedux }
+              placeholder="Ваш Email"
+              label="Ваш Email"
+              required
+              validate={ [required, email] }
+              className={ classes.field }
+            />
+          </FormControl>
+        </div >
+      );
+    }
+
+    return (
+      <div>
+        <FormControl className={ classes.formControl }>
+          <Field
+            name="password"
+            component={ TextFieldRedux }
+            type={ showPassword ? 'text' : 'password' }
+            label="Ваш пароль"
+            InputProps={ {
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="Toggle password visibility"
+                    onClick={ handleClickShowPassword }
+                    onMouseDown={ handleMouseDownPassword }
+                  >
+                    { showPassword ? <VisibilityOff /> : <Visibility /> }
+                  </IconButton>
+                </InputAdornment>
+              )
+            } }
+            required
+            validate={ required }
+            className={ classes.field }
+          />
+        </FormControl>
+      </div>
+    );
+  };
+
   return (
-    <Paper className={classNames(classes.sideWrap, deco && classes.petal)}>
-      <div className={classes.topBar}>
-        <NavLink to="/" className={classes.brand}>
-          <img src={logo} alt={brand.name} />
-          {brand.name}
+    <Paper className={ classNames(classes.sideWrap, deco && classes.petal) }>
+      <Notification message={errorMessage} close={setErrorMessage} />
+      <div className={ classes.topBar }>
+        <NavLink to="/" className={ classes.brand }>
+          <img src={ logo } alt={ brand.name } />
+          { brand.name }
         </NavLink>
       </div>
 
-      <div className={classes.wrapper}>
+      <div className={ classes.wrapper }>
         <div>
-          <Typography variant="h4" className={classes.title} gutterBottom>
+          <Typography variant="h4" className={ classes.title } gutterBottom>
             Вход/регистрация
           </Typography>
-          <Typography variant="caption" className={classes.subtitle} gutterBottom align="center">
+          <Typography variant="caption" className={ classes.subtitle } gutterBottom align="center">
             Введите адрес электронной почты
           </Typography>
 
-          <section className={classes.pageFormSideWrap}>
-            <form onSubmit={handleSubmit(submitHandler)}>
-              {getFormContent()}
+          <section className={ classes.pageFormSideWrap }>
+            <form onSubmit={ handleSubmit(submitHandler) }>
+              { getFormContent() }
 
-              <div className={classes.btnArea}>
-                <Button variant="contained" fullWidth color="primary" size="large" type="submit">
+              <div className={ classes.btnArea }>
+                <Button variant="contained" fullWidth color="primary" size="large" type="submit" disabled={submitting || pristine}>
                   ДАЛЕЕ
-                  <ArrowForward className={classNames(classes.rightIcon, classes.iconSmall)} disabled={submitting || pristine} />
+                  <ArrowForward className={ classNames(classes.rightIcon, classes.iconSmall) }  />
                 </Button>
               </div>
             </form>

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
@@ -23,12 +23,19 @@ import messageStyles from 'dan-styles/Messages.scss';
 import avatarApi from 'dan-api/images/avatars';
 import link from 'dan-api/ui/link';
 import styles from './header-jss';
+import { LogOutRequest } from './api';
+import { useSelector } from 'react-redux';
 
 function UserMenu(props) {
   const [menuState, setMenuState] = useState({
     anchorEl: null,
     openMenu: null
   });
+
+  const history = useHistory();
+  const {
+    user,
+  } = useSelector(state => state.user);
 
   const handleMenu = menu => (event) => {
     const { openMenu } = menuState;
@@ -40,6 +47,15 @@ function UserMenu(props) {
 
   const handleClose = () => {
     setMenuState({ anchorEl: null, openMenu: null });
+  };
+
+  const logOut = async () => {  
+    const isLogedOut = await LogOutRequest();
+
+    if (isLogedOut) {
+      localStorage.removeItem('token');
+      history.push('/login');
+    }
   };
 
   const { classes, dark } = props;
@@ -131,8 +147,8 @@ function UserMenu(props) {
       </Menu>
       <Button onClick={handleMenu('user-setting')}>
         <Avatar
-          alt={dummy.user.name}
-          src={dummy.user.avatar}
+          alt={`${user.first_name} ${user.last_name}`}
+          src={user.avatar && user.avatar.path}
         />
       </Button>
       <Menu
@@ -150,15 +166,15 @@ function UserMenu(props) {
         onClose={handleClose}
       >
         <MenuItem onClick={handleClose} component={Link} to={link.profile}>My Profile</MenuItem>
-        <MenuItem onClick={handleClose} component={Link} to={link.calendar}>My Calendar</MenuItem>
-        <MenuItem onClick={handleClose} component={Link} to={link.email}>
+        {/* <MenuItem onClick={handleClose} component={Link} to={link.calendar}>My Calendar</MenuItem> */}
+        {/* <MenuItem onClick={handleClose} component={Link} to={link.email}>
           My Inbox
           <ListItemIcon>
             <Badge className={classNames(classes.badge, classes.badgeMenu)} badgeContent={2} color="secondary" />
           </ListItemIcon>
-        </MenuItem>
+        </MenuItem> */}
         <Divider />
-        <MenuItem onClick={handleClose} component={Link} to="/">
+        <MenuItem onClick={logOut}>
           <ListItemIcon>
             <ExitToApp />
           </ListItemIcon>

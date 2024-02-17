@@ -12,51 +12,41 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import cardBg from 'dan-images/utils/editCardBg.svg';
 import styles from './cardStyle-jss';
+import { useHistory } from 'react-router-dom';
 
 function EditProductCard(props) {
   const {
     classes,
-    discount,
-    soldout,
-    thumbnail,
-    name,
-    desc,
-    ratting,
-    price,
-    prevPrice,
     list,
     detailOpen,
     addToCart,
     width,
     edit,
+    isAdmin,
   } = props;
 
-  // const getCardAction = () => {
-  //   if (edit && !soldout) {
-  //     return (
-  //       <Tooltip title="Редактировать трек" placement="top">
-  //         <Fab onClick={edit} size="medium" color="secondary" aria-label="add" className={classes.buttonAdd}>
-  //           <CreateIcon />
-  //         </Fab>
-  //       </Tooltip>
-  //     );
-  //   }
+  const history = useHistory();
 
-  //   if (!soldout) {
-  //     return (
-  //       <Tooltip title="Купить трек" placement="top">
-  //         <Fab onClick={addToCart} size="medium" color="secondary" aria-label="add" className={classes.buttonAdd}>
-  //           <AddShoppingCart />
-  //         </Fab>
-  //       </Tooltip>
-  //     );
-  //   }
-  // };
+  const playButtonHandler = () => {
+    if (isAdmin) {
+      history.push({
+        pathname: `/shop/projects/create`,
+      });
+      
+      return;
+    }
+    
+    history.push({
+      pathname: `/shop/chat/1`,
+    });
+  };
+  
+  const buttonTitle = isAdmin ? 'Добавить проект' : 'Заказать уникальный проект';
 
   return (
     <Card className={classNames(classes.cardProduct, isWidthUp('sm', width) && list ? classes.cardList : '')}>
       <div className={classes.mediaWrapper}>
-        <Fab size="medium" color="secondary" aria-label="add" className={classes.buttonPlay}>
+        <Fab size="medium" color="secondary" aria-label="add" className={classes.buttonPlay} onClick={playButtonHandler}>
           <AddOutlinedIcon />
         </Fab>
         <CardMedia
@@ -68,7 +58,7 @@ function EditProductCard(props) {
 
       <CardContent className={classes.buttonWrapper}>
         <Button size="medium" variant="outlined" color="secondary" onClick={detailOpen}>
-          Добавить проект
+          {buttonTitle}
         </Button>
       </CardContent>
     </Card>
@@ -77,24 +67,13 @@ function EditProductCard(props) {
 
 EditProductCard.propTypes = {
   classes: PropTypes.object.isRequired,
-  // discount: PropTypes.string,
   width: PropTypes.string.isRequired,
-  // soldout: PropTypes.bool,
-  // thumbnail: PropTypes.string.isRequired,
-  // name: PropTypes.string.isRequired,
-  // desc: PropTypes.string.isRequired,
-  // ratting: PropTypes.number.isRequired,
-  // price: PropTypes.number.isRequired,
-  // prevPrice: PropTypes.number,
   list: PropTypes.bool,
   detailOpen: PropTypes.func,
-  // addToCart: PropTypes.func,
+  isAdmin: PropTypes.bool,
 };
 
 EditProductCard.defaultProps = {
-  // discount: '',
-  // soldout: false,
-  // prevPrice: 0,
   list: false,
   detailOpen: () => (false),
   addToCart: () => (false),

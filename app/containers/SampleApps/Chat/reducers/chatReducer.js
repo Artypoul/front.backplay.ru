@@ -35,7 +35,7 @@ const chatdReducer = (state = initialState, action = {}) => produce(state, draft
       draft.activeChat = action.items[draft.chatSelected].chat;
       break;
     case SHOW_CHAT: {
-      const index = draft.chatList.findIndex((obj) => obj.with === action.person.id);
+      const index = draft.chatList.findIndex((obj) => obj.id === action.person.id);
       if (index !== -1) {
         draft.chatSelected = index;
         draft.activeChat = draft.chatList[index].chat;

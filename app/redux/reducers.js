@@ -11,6 +11,11 @@ import languageProviderReducer from 'containers/LanguageProvider/reducer';
 import uiReducer from './modules/ui';
 import initval from './modules/initForm';
 import login from './modules/login';
+import product from './modules/product';
+import about from './modules/about';
+import checkout from './modules/checkout';
+import user from './modules/user';
+import player from './modules/player';
 import treeTable from '../containers/Tables/reducers/treeTbReducer';
 import crudTable from '../containers/Tables/reducers/crudTbReducer';
 import crudTableForm from '../containers/Tables/reducers/crudTbFrmReducer';
@@ -46,6 +51,10 @@ export default function createReducer(injectedReducers = {}) {
     ui: uiReducer,
     initval,
     login,
+    product,
+    about,
+    checkout,
+    player,
     socmed,
     ecommerce,
     contact,
@@ -60,6 +69,7 @@ export default function createReducer(injectedReducers = {}) {
     crudTbFrmDemo: branchReducer(crudTableForm, 'crudTbFrmDemo'),
     language: languageProviderReducer,
     router: connectRouter(history),
+    user,
     ...injectedReducers,
   });
 

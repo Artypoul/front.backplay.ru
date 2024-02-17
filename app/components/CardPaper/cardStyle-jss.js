@@ -138,7 +138,11 @@ const styles = theme => ({
   title: {
     fontSize: 20,
     height: 30,
-    fontWeight: theme.typography.fontWeightMedium
+    fontWeight: theme.typography.fontWeightMedium,
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+    cursor: 'pointer',
   },
   ratting: {
     margin: '10px 0',

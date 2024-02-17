@@ -30,6 +30,7 @@ function Cover(props) {
     name,
     desc,
     coverImg,
+    button,
   } = props;
 
   const handleClickOpt = event => {
@@ -83,9 +84,11 @@ function Cover(props) {
         <Typography className={classes.subheading} gutterBottom>
           {desc}
         </Typography>
-        <Button className={classes.button} size="large" variant="contained" color="secondary">
-          Add to Connection
-        </Button>
+        {button && (
+          <Button className={classes.button} size="large" variant="contained" color="secondary" onClick={button.action}>
+            {button.title}
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -97,6 +100,7 @@ Cover.propTypes = {
   name: PropTypes.string.isRequired,
   desc: PropTypes.string.isRequired,
   coverImg: PropTypes.string.isRequired,
+  button: PropTypes.object,
 };
 
 export default withStyles(styles)(Cover);

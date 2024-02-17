@@ -1,40 +1,96 @@
-import React, { useContext } from 'react';
 import { PropTypes } from 'prop-types';
-import { Switch, Route } from 'react-router-dom';
-import { ThemeContext } from './ThemeWrapper';
+import React, { useContext } from 'react';
+import { Route, Switch } from 'react-router-dom';
 import Dashboard from '../Templates/Dashboard';
 import {
-  PersonalDashboard, CrmDashboard, CryptoDashboard,
-  Infographics, MiniApps, Analytics,
-  InfoUpdates, Status,
-  Parent, AppLayout, Responsive, Grid,
-  SimpleTable, AdvancedTable, TablePlayground,
-  TreeTable, EditableCell,
-  ReduxForm, DateTimePicker, CheckboxRadio,
-  Switches, Selectbox, Rating,
-  SliderRange, Buttons, DialButton,
-  ToggleButton, Textbox,
-  Autocomplete, Upload, TextEditor,
-  Avatars, Accordion, Badges,
-  List, PopoverTooltip, Snackbar,
-  Typography, Tabs, Cards,
-  ImageGrid, Progress, DialogModal,
-  Steppers, Paginations, DrawerMenu,
-  Breadcrumbs, Icons, IonIcons,
-  SliderCarousel, Tags, Dividers,
-  LineCharts, BarCharts, AreaCharts,
-  PieCharts, RadarCharts, ScatterCharts, CompossedCharts,
-  DoughnutCharts, BarDirection, LineScatterChart,
-  AreaFilledChart, RadarPolarCharts,
-  TaskBoard, Calendar, Chat,
-  Contact, Ecommerce, Email,
+  Accordion,
+  AdvancedTable,
+  Analytics,
+  AppLayout,
+  AreaCharts,
+  AreaFilledChart,
+  Autocomplete,
+  Avatars,
+  Badges,
+  BarCharts,
+  BarDirection,
+  BlankPage,
+  BotPage,
+  Breadcrumbs,
+  Buttons,
+  Calendar,
+  Cards,
+  Chat,
+  CheckboxRadio,
+  CheckoutPage,
+  CompossedCharts,
+  Contact,
+  CrmDashboard, CryptoDashboard,
+  DateTimePicker,
+  DialButton,
+  DialogModal,
+  Dividers,
+  DoughnutCharts,
+  DrawerMenu,
+  Ecommerce,
+  EditableCell,
+  Email,
+  Error,
+  Grid,
+  HelpSupport,
+  Icons,
+  ImageGrid,
+  InfoUpdates,
+  Infographics,
+  Invoice,
+  IonIcons,
+  LineCharts,
+  LineScatterChart,
+  List,
+  MapDirection,
+  MapMarker,
+  MiniApps,
+  NotFound,
+  Paginations,
+  Parent,
+  Photos,
+  PieCharts,
+  PopoverTooltip,
+  Pricing,
+  ProductPage,
+  Profile,
+  Progress,
+  RadarCharts,
+  RadarPolarCharts,
+  Rating,
+  ReduxForm,
+  Responsive,
+  ScatterCharts,
+  SearchMap,
+  Selectbox,
+  Settings,
+  SimpleTable,
+  SliderCarousel,
+  SliderRange,
+  Snackbar,
+  Status,
+  Steppers,
+  StreetViewMap,
+  Switches,
+  TablePlayground,
+  Tabs,
+  Tags,
+  TaskBoard,
+  TextEditor,
+  Textbox,
   Timeline,
-  ProductPage, Invoice, Profile, BlankPage,
-  Photos, Pricing, CheckoutPage,
-  Error, Settings, HelpSupport,
-  MapMarker, MapDirection, SearchMap,
-  TrafficIndicator, StreetViewMap, NotFound
+  ToggleButton,
+  TrafficIndicator,
+  TreeTable,
+  Typography,
+  Upload,
 } from '../pageListAsync';
+import { ThemeContext } from './ThemeWrapper';
 
 function Application(props) {
   const { history } = props;
@@ -121,8 +177,10 @@ function Application(props) {
         { /* Sample Apps */ }
         <Route path="/shop/checkout" component={CheckoutPage} />
         <Route path="/shop/pages/product-detail" component={ProductPage} />
-        <Route path="/shop/product/:id" component={ProductPage} />
-        <Route path="/shop/product/create" component={ProductPage} />
+        <Route path="/shop/projects/:id" component={ProductPage} />
+        {/* <Route path="/shop/projects/details" component={ProductPage} /> */}
+        <Route path="/shop/projects/create" component={ProductPage} />
+        <Route path="/shop/projects/:id/edit" component={ProductPage} />
         <Route path="/app/pages/invoice" component={Invoice} />
         <Route path="/app/pages/taskboard" component={TaskBoard} />
         <Route path="/app/pages/calendar" component={Calendar} />
@@ -142,6 +200,10 @@ function Application(props) {
         <Route path="/app/pages/error" component={Error} />
         <Route path="/shop/pages/settings" component={Settings} />
         <Route path="/shop/pages/help-support" component={HelpSupport} />
+        {/* <Route path="/shop/bot" component={BotPage} /> */}
+        {/* <Route path="/shop/bot/:projectID" component={BotPage} /> */}
+        <Route path="/shop/bot/:projectId/:type" component={BotPage} />
+        <Route path="/shop/order/:orderId" component={BotPage} />
         { /* Map */ }
         <Route exact path="/app/maps" component={Parent} />
         <Route path="/shop/maps/map-marker" component={MapMarker} />

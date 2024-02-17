@@ -30,6 +30,14 @@ const places = {
     path: '/shop/product/create',
     name: 'Добавление нового проекта',
   },
+  '/shop/product/details': {
+    path: '/shop/product/details',
+    name: 'Карточка проекта',
+  },
+  '/shop/product/edit': {
+    path: '/shop/product/edit',
+    name: 'Редактирование проекта',
+  },
   '/shop/checkout': {
     path: '/shop/checkout',
     name: 'Оформление заказа',
@@ -100,6 +108,7 @@ function Dashboard(props) {
   // const place = parts[parts.length - 1].replace('-', ' ');
   const place = places[history.location.pathname] || {
     name: 'default',
+    path: '',
   };
   return (
     <div

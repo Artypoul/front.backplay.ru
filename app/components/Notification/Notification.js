@@ -19,7 +19,7 @@ function Notification(props) {
     if (reason === 'clickaway') {
       return;
     }
-    close('crudTableDemo');
+    close('');
   };
 
   const { classes, message } = props;

@@ -13,6 +13,7 @@ import dataMenu from 'dan-api/ui/menu';
 import Decoration from '../Decoration';
 import styles from '../appStyles-jss';
 import Player from '../../../components/Player';
+import { useDispatch, useSelector } from 'react-redux';
 
 function LeftSidebarLayout(props) {
   const {
@@ -34,6 +35,9 @@ function LeftSidebarLayout(props) {
   } = props;
 
   const isBreadCrumbsShown = !place.path.includes('profile');
+  const {
+    music,
+  } = useSelector(state => state.player);
 
   return (
     <Fragment>
@@ -79,7 +83,9 @@ function LeftSidebarLayout(props) {
               {/* Application content will load here */}
               {children}
 
-              <Player />
+              {music && (
+                <Player data={music} />
+              )}
             </div>
           </Fade>
         </section>

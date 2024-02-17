@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import orange from '@material-ui/core/colors/orange';
@@ -36,6 +36,10 @@ function Rating(props) {
     ...other
   } = props;
   const [hoverValue, setHoverValue] = useState(value);
+
+  useEffect(() => {
+    setHoverValue(value);
+  }, [value]);
 
   const renderIcon = (i) => {
     const filled = i <= value;

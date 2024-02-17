@@ -1,49 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import FavoriteOutlinedIcon from '@material-ui/icons/FavoriteOutlined';
 
 import styles from './filter-jss';
 import { Button, Fab, IconButton, MenuItem, Select } from '@material-ui/core';
 
-const filterItems = [{
-  value: 'all',
-  label: 'ВСЕ',
-}, {
-  value: 'playback',
-  label: 'ПЛЕЙБЭК',
-}, {
-  value: 'new',
-  label: 'НОВОЕ',
-}, {
-  value: 'composition',
-  label: 'КОМПОЗИЦИЯ',
-}, {
-  value: 'melody',
-  label: 'МЕЛОДИЯ',
-}, {
-  value: 'gormony',
-  label: 'ГАРМОНИЯ',
-}, {
-  value: 'gitar',
-  label: 'ГИТАРА',
-}, {
-  value: 'bar',
-  label: 'БАРАБАНЫ',
-}, {
-  value: 'other',
-  label: 'РАЗНОЕ',
-}];
-
 const Filter = (props) => {
   const {
     classes,
+    items,
+    selectedItems,
+    setSelectedItems,
+    onFilter,
   } = props;
 
-  const [selectedItemValue, setSelectedItemValue] = useState(0);
-
-  const changeFilterItems = (itemIndex) => {
+  const changeFilterItems = (itemId) => {
     return () => {
-      setSelectedItemValue(itemIndex);
+      if (itemId === 0) {
+        setSelectedItems({});
+
+        return;
+      }
+
+      if (itemId) {
+        setSelectedItems((prev) => {
+          const copiedTags = Object.assign({}, prev);
+          
+          if (copiedTags[itemId]) {
+            delete copiedTags[itemId];
+          } else {
+            copiedTags[itemId] = true;
+          }
+
+          return copiedTags;
+        });
+      }
     };
   };
 
@@ -57,34 +48,32 @@ const Filter = (props) => {
 
       <div className={classes.itemsWrapper}>
         <div className={classes.items}>
-          {filterItems.map((filterItem, index) => (
+          <Button
+            variant='contained'
+            className={`${classes.item} ${!Object.keys(selectedItems).length && 'active'}`}
+            onClick={changeFilterItems(0)}
+          >
+            Все
+          </Button>
+          {(items || []).map((filterItem, index) => (
             <Button
               variant='contained'
-              key={filterItem.label}
-              value={filterItem.value}
-              className={`${classes.item} ${index === selectedItemValue && 'active'}`}
-              onClick={changeFilterItems(index)}
+              key={filterItem.id}
+              className={`${classes.item} ${selectedItems[filterItem.id] && 'active'}`}
+              onClick={changeFilterItems(filterItem.id)}
             >
-              {filterItem.label}
+              {filterItem.name}
             </Button>
           ))}
+          {/* <Button
+            variant='contained'
+            className={`${classes.item} ${selectedItems['-1'] && 'active'}`}
+            onClick={changeFilterItems(-1)}
+          >
+            Разное
+          </Button> */}
         </div>
       </div>
-      {/* <Select
-        autoWidth={true}
-        value={selectedItemValue}
-        onChange={handleValueChange}
-        name='music-types'
-        style={{
-          width: 100,
-        }}
-      >
-        {filterItems.map((filterItem) => (
-          <MenuItem key={filterItem.label} value={filterItem.value}>
-            {filterItem.label}
-          </MenuItem>
-        ))}
-      </Select> */}
     </div>
   );
 };

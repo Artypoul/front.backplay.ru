@@ -4,25 +4,63 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './photo-jss';
+import { useSelector } from 'react-redux';
+import Pagination from '../Pagination/Pagination';
 
 function PhotoGallery(props) {
-  const { classes, imgData } = props;
+  const {
+    classes,
+    pagination,
+    projects,
+    setProjects,
+    tags,
+    selectedTags,
+    setSelectedTags,
+    setPage,
+  } = props;
+
+  const {
+    user,
+    isAdmin,
+  } = useSelector(state => state.user);
 
   const history = useHistory();
 
-  const editTrack = (trackId) => {
-    return () => {
-      history.push(`/music/${trackId}`);
-    };
-  };
-
   const addToCart = (item) => {
     return async () => {
-      console.log('item', item);
+      history.push(`/shop/bot`);
     };
   };
 
-  const isAuthor = false;
+  const editProject = (projectID) => {
+    return () => {
+      history.push(`/shop/projects/${projectID}/edit`);
+    };
+  };
+
+  const handleOpenProject = (projectID) => {
+    return () => history.push(`/shop/projects/${projectID}`);
+  };
+
+  const onChange = (page) => {
+    setPage(page);
+  }
+
+  const onPrev = (page) => {
+    setPage(page);
+  }
+
+  const onNext = (page) => {
+    setPage(page);
+  }
+
+  const onGoFirst = (page) => {
+    setPage(page);
+  }
+
+  const onGoLast = (page) => {
+    setPage(page);
+  }
 
   return (
     <div>
@@ -31,33 +69,53 @@ function PhotoGallery(props) {
         listView='grid'
       />
 
-      <Filter />
+      <Filter
+        items={tags}
+        selectedItems={selectedTags}
+        setSelectedItems={setSelectedTags}
+        onFilter={setProjects}
+      />
 
-      <div className={classes.masonry}>
-        <EditProductCard />
+      <div className={`${classes.masonry} ${!projects.length && 'empty'}`}>
+        <EditProductCard isAdmin={isAdmin} />
 
-        {imgData.map((thumb, index) => (
+        {projects.map((project, index) => (
           <ProductCard
             key={index}
-            thumbnail={thumb.img}
-            name={thumb.title}
-            desc={thumb.desc}
-            ratting={thumb.ratting}
-            price={thumb.price}
-            prevPrice={thumb.prevPrice}
-            soldout={thumb.soldout}
-            addToCart={addToCart(thumb)}
-            edit={() => {}}
+            thumbnail={project.preview.path}
+            name={project.name}
+            desc={project.singer}
+            ratting={project.rate}
+            price={project.price}
+            prevPrice={project.price_without_bass}
+            soldout={project.soldout}
+            addToCart={addToCart(project)}
+            edit={editProject(project.id)}
+            open={handleOpenProject(project.id)}
+            isAdmin={isAdmin}
+            demo={project.demo}
           />
         ))}
       </div>
+
+      {pagination.total_pages > 1 && (
+        <Pagination
+          curpage={pagination.current_page || 0}
+          totpages={pagination.total_pages || 1}
+          onChange={onChange}
+          onPrev={onPrev}
+          onNext={onNext}
+          onGoFirst={onGoFirst}
+          onGoLast={onGoLast}
+        />
+      )}
     </div>
   );
 }
 
 PhotoGallery.propTypes = {
   classes: PropTypes.object.isRequired,
-  imgData: PropTypes.array.isRequired
+  projects: PropTypes.array.isRequired
 };
 
 export default withStyles(styles)(PhotoGallery);
