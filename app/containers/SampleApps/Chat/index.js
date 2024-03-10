@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,43 +11,106 @@ import {
   showChatAction,
   sendAction,
   hideDetailAction,
-  deleteAction
+  deleteAction,
+  fillMessages
 } from './reducers/chatActions';
 import { fetchAction, searchAction } from '../Contact/reducers/contactActions';
 import contactData from '../Contact/api/contactData';
 import chatData from './api/chatData';
 import { GetChats } from './api/getChats';
+import { bindChannel, initPusher, unsubscribeChannel } from './handlers';
+import { CreateChat, GetMessages, SendMessage } from './api';
+
+let chatId = null;
 
 function Chat(props) {
-  // Redux State
   const dataContact = useSelector(state => state.contact.contactList);
   const dataChat = useSelector(state => state.chat.activeChat);
   const chatSelected = useSelector(state => state.chat.chatSelected);
   const showMobileDetail = useSelector(state => state.chat.showMobileDetail);
   const keyword = useSelector(state => state.contact.keywordValue);
 
-  // Dispatcher
+  const [chats, setChats] = useState([]);
+
+  const {
+    user,
+  } = useSelector(state => state.user);
+  
   const dispatch = useDispatch();
-  // const fetchContactData = useDispatch();
-  // const fetchChatData = useDispatch();
-  // const hideDetail = useDispatch();
-  // const showDetail = useDispatch();
-  // const search = useDispatch();
-  // const sendMessage = useDispatch();
-  // const remove = useDispatch();
+  
+  const pusherRef = useRef(null);
 
   const getChats = async () => {
-    const chats = await GetChats();
-    console.log('chats', chats);
+    const {
+      users,
+      chats,
+    } = await GetChats();
+    setChats(chats);
 
-    // dispatch(fetchChatAction(chats));
-    dispatch(fetchAction(chats));
+    dispatch(fetchChatAction(users));
+    dispatch(fetchAction(users));
   };
-  console.log('dataContact', dataContact, contactData)
+
+  const connectPusher = () => {
+    const pusher = initPusher();
+    pusherRef.current = pusher;
+
+    bindChannel(pusher, user.id, dispatch);
+  };
+
+  const sendMessage = async (value) => {
+    const trimedValue = value.trim();
+    if (!trimedValue.length) {
+      return;
+    }
+
+    SendMessage(chatId, trimedValue);
+    dispatch(sendAction({
+      userId: user.id,
+      text: trimedValue,
+    }));
+  };
 
   useEffect(() => {
     getChats();
+    connectPusher();
+
+    return () => {
+      unsubscribeChannel(pusherRef.current, user.id);
+    };
   }, []);
+
+  const chatInitialization = async () => {
+    if (!chats.length || !dataContact.length) {
+      const chat = await CreateChat({
+        user_id: dataContact[chatSelected].id,
+      });
+
+      chatId = chat.id;
+      return;
+    }
+
+    chatId = chats.find((chat) => {
+      const currentChat = dataContact[chatSelected];
+      if (user.role.id === 2) {
+        return chat.user.id === currentChat.id;
+      }
+
+      return chat.author.id === currentChat.id;
+    }).id;
+
+    const {
+      messages,
+    } = await GetMessages(chatId);
+
+    if (messages) {
+      dispatch(fillMessages(messages));
+    }
+  };
+
+  useEffect(() => {
+    chatInitialization();
+  }, [chats, dataContact, chatSelected]);
 
   const title = brand.name + ' - Chat App';
   const description = brand.desc;
@@ -72,15 +135,17 @@ function Chat(props) {
           search={(payload) => dispatch(searchAction(payload))}
           keyword={keyword}
         />
-        {/* <ChatRoom
+        <ChatRoom
           showMobileDetail={showMobileDetail}
           dataChat={dataChat}
           chatSelected={chatSelected}
           dataContact={dataContact}
-          sendMessage={(payload) => dispatch(sendAction(payload))}
+          // sendMessage={(payload) => di/spatch(sendAction(payload))}
+          sendMessage={(payload) => sendMessage(payload)}
           remove={() => dispatch(deleteAction)}
           hideDetail={() => dispatch(hideDetailAction)}
-        /> */}
+          userId={user.id}
+        />
       </div>
     </div>
   );

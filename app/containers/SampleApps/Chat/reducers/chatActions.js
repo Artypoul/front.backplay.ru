@@ -19,6 +19,11 @@ export const sendAction = message => ({
   message,
 });
 
+export const fillMessages = messages => ({
+  type: types.FILL_MESSAGES,
+  messages,
+});
+
 export const deleteAction = {
   type: types.DELETE_CONVERSATION,
 };

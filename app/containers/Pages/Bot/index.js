@@ -6,15 +6,18 @@ import botIcon from 'dan-images/utils/bot.svg';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import { styles } from './bot-jss';
-import { GetHistory, GetOrderSteps, LoadFile, MakeOrder, getProjectsInfo } from './api';
+import { GetHistory, GetOrderSteps, LoadFile, MakeOrder, OrderAccept, OrderDecline, SendToCheck, getProjectsInfo } from './api';
 import { formateDate } from './handlers';
 import Modal from './modal';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
+import Checkbox from '@material-ui/core/Checkbox';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const requestData = {};
+let createdOrderId = null;
 
 const Bot = (props) => {
   const {
@@ -26,12 +29,20 @@ const Bot = (props) => {
   const description = brand.desc;
 
   const [history, setHistory] = useState([]);
+  const [orderFiles, setOrderFiles] = useState([]);
   const [steps, setSteps] = useState([]);
   const [items, setItems] = useState({});
 
+  const [comment, setComment] = useState('');
+  const [link, setLink] = useState('');
+
   const [step, setStep] = useState(1);
+  const [project, setProject] = useState(null);
 
   const [isOpened, setIsOpened] = useState(false);
+  const [isPaymentAction, setIsPaymentAction] = useState(false);
+
+  const navigate = useHistory();
 
   const {
     projectId,
@@ -43,18 +54,25 @@ const Bot = (props) => {
     user,
   } = useSelector(state => state.user);
 
+  const changeInputValue = (action) => {
+    return (event) => {
+      action(event.target.value);
+    };
+  };
+
   const handleOpen = () => setIsOpened(true);
   const handleClose = () => setIsOpened(false);
 
   const selectItem = (field, item) => {
     return () => {
-      requestData[field] = item.id;
+      const [keyName] = field.split('_')
+      requestData[field] = item[keyName] ? item[keyName].id : item.id;
 
       handleClose();
 
       setSteps((prev) => {
         const newArray = Array.from(prev);
-        newArray[step - 1].answer = item.name;
+        newArray[step - 1].answer = item[keyName] ? item[keyName].name : item.name;
 
         return newArray;
       });
@@ -70,6 +88,7 @@ const Bot = (props) => {
       setSteps((prev) => {
         const newArray = Array.from(prev);
         newArray[step - 1].answer = value ? 'С басом' : 'Без баса';
+        newArray[step].text = `Сумма к оплате ${value ? project.price : project.price_without_bass} рублей, для оплаты заказа нажмите оплатить`;
 
         return newArray;
       });
@@ -78,16 +97,24 @@ const Bot = (props) => {
     };
   };
 
+  console.log('step', step)
   const handleDrumbsState = (value) => {
-    return () => {
+    return async () => {
       requestData.with_drums = value;
       
-      setSteps((prev) => {
-        const newArray = Array.from(prev);
-        newArray[step - 1].answer = value ? 'С баРАБАНАМИ' : 'Без БАРАБАНОВ';
+      if (step === 3) {
+        const order = await makePayment();
+        createdOrderId = order.id;
 
-        return newArray;
-      });
+        setSteps((prev) => {
+          const newArray = Array.from(prev);
+          newArray[step - 1].answer = value ? 'С баРАБАНАМИ' : 'Без БАРАБАНОВ';
+          newArray[steps.length - 1].text = `К оплате ${order.amount}p, пожалуйста нажмите кнопку оплатить`;
+  
+          return newArray;
+        });
+      }
+
 
       setStep(prev => prev + 1);
     };
@@ -99,8 +126,8 @@ const Bot = (props) => {
     if (!file) {
       return;
     }
-  
-    if (!file.type.match(/|mp4|mp3|mpeg/g)) {
+
+    if (!file.type.includes('mpeg')) {
       return;
     }
 
@@ -120,15 +147,83 @@ const Bot = (props) => {
   };
 
   const makePayment = async () => {
-    console.log('requestData', requestData)
     requestData.order_type_id = +type;
 
     if (+type !== 3) {
       requestData.project_id = +projectId;
     }
 
-    const order = await MakeOrder(requestData);
-    console.log('order', order)
+    if (!createdOrderId) {
+      const order = await MakeOrder(requestData);
+      
+      if (+type === 1) {
+        navigate.push(`/shop/checkout/${order.id}`);
+      }
+
+      return order;
+    }
+
+    navigate.push(`/shop/checkout/${createdOrderId}`);
+    // if (step !== 4) {
+    //   navigate.push(`/shop/checkout/${order.id}`);
+
+    //   return;
+    // }
+
+    // const order = await MakeOrder(requestData);
+    // return order;
+  };
+
+  const sendToCheck = async () => {
+    if (!link) {
+      return;
+    }
+
+    const file = await SendToCheck(orderId, {
+      link,
+    });
+
+    if (file) {
+      setOrderFiles((prev) => {
+        const newArray = Array.from(prev);
+        newArray.push(file);
+  
+        return newArray;
+      });
+    }
+  };
+
+  const orderAccept = async () => {
+    const uppdatedFile = await OrderAccept(orderId);
+
+    setOrderFiles((prev) => {
+      const newArray = Array.from(prev);
+      
+      const currentFileIndex = newArray.findIndex((file) => file.id === uppdatedFile.id);
+      newArray[currentFileIndex] = uppdatedFile;
+      console.log('uppdatedFile', uppdatedFile, newArray[currentFileIndex])
+
+      return newArray;
+    });
+  };
+
+  const orderDecline = async () => {
+    if (!comment) {
+      return;
+    }
+
+    const uppdatedFile = await OrderDecline(orderId, {
+      comment,
+    });
+
+    setOrderFiles((prev) => {
+      const newArray = Array.from(prev);
+      
+      const currentFileIndex = newArray.findIndex((file) => file.id === uppdatedFile.id);
+      newArray[currentFileIndex] = uppdatedFile;
+
+      return newArray;
+    });
   };
 
   const getOrderSteps = async () => {
@@ -138,6 +233,7 @@ const Bot = (props) => {
         orderFiles,
       } = await GetHistory(orderId);
       setHistory(steps);
+      setOrderFiles(orderFiles);
 
       const {
         keys,
@@ -154,17 +250,26 @@ const Bot = (props) => {
 
     const steps = await GetOrderSteps(type);
     if (steps && steps.length) {
-      setSteps(steps);
+      const endStep = {
+        id: 3,
+        key: '',
+        text: '',
+      };
+      setSteps([...steps, endStep]);
     }
 
     const {
       keys,
       changes,
-    } = await getProjectsInfo();
+      variants,
+      project,
+    } = await getProjectsInfo(projectId);
+
+    setProject(project);
 
     setItems({
-      topItems: keys,
-      bottomItems: changes,
+      topItems: +type === 3 ? keys : variants,
+      bottomItems: +type === 3 ? changes : variants,
     });
   };
 
@@ -178,6 +283,9 @@ const Bot = (props) => {
     }
 
     const data = actions[type][step];
+    if (!data) {
+      return null;
+    }
 
     return (
       <div className={classes.action}>
@@ -263,9 +371,33 @@ const Bot = (props) => {
 
   const getAnswer = (message) => {
     if (message.answer || message.name) {
-      // const file = null;
-      const change = (items.bottomItems || []).find((item) => item.id === message.change_id);
-      const key = (items.topItems || []).find((item) => item.id === message.key_id);
+      const file = message.file_id;
+      const change = message.change_id;
+      const key = message.key_id;
+      const bass = message.with_bass;
+      const drumbs = message.with_drums;
+
+      let text = '';
+      switch (true) {
+        case !!file:
+          text = file.name;
+          break;
+        case !!change:
+          text = change.name;
+          break;
+        case !!key:
+          text = key.name;
+          break;
+        case bass !== null:
+          text = bass ? 'С басом' : 'Без баса';
+          break;
+        case drumbs !== null:
+          text = drumbs ? 'С барабанами' : 'Без барабанов';
+          break;
+        default:
+          text = '';
+          break;
+      }
 
       return (
         <div className={classes.answerResult}>
@@ -273,13 +405,13 @@ const Bot = (props) => {
             {user.avatar ? (
               <img src={user.avatar.path} alt="avatar" />
             ) : (
-              user.first_name.at(0)
+              user.first_name && user.first_name.at(0)
             )}
           </div>
 
           <div className={classes.text}>
             <span>{formateDate()}</span>
-            <div>{message.answer || (change && change.name) || (key && key.name) || (message.with_bass ? 'С басом' : 'Без баса')}</div>
+            <div>{message.answer || text}</div>
           </div>
         </div>
       );
@@ -335,35 +467,50 @@ const Bot = (props) => {
         <div className={classes.content}>
           {history.map((message) => getContent(message))}
           {steps.slice(0, step).map((message) => getContent(message))}
+          
+          {orderFiles.map((orderFile) => (
+            <div className={classes.file}>
+              <div className={classes.fileWrapper}>
+                <audio src={orderFile.link} controls={true}></audio>
+                <strong>{orderFile.comment}</strong>
+              </div>
+
+              <Checkbox defaultChecked={!!orderFile.is_accepted} disabled={true} />
+            </div>
+          ))}
         </div>
 
-        {actions[type] && (step === (Object.keys(actions[type]).length + 1)) && (
+        {((actions[type] && (step === (Object.keys(actions[type]).length + 1)))) && (
           <div className={classes.action}>
             <span>Чтобы оплатить заказ нажмите</span>
             <Button variant='contained' color='secondary' onClick={makePayment}>ОПЛАТИТЬ</Button>
           </div>
         )}
 
-        {user.role.id === 2 && (
+        {(user.role.id === 2 && ((orderFiles.at(-1) && orderFiles.at(-1).is_accepted === 0) || !orderFiles.length)) && (
           <div className={classes.confirm}>
             <TextField
               placeholder='+ добавить ссылку на архив'
               className={classes.input}
+              value={link}
+              onChange={changeInputValue(setLink)}
             />
-            <Button variant='contained' color='primary'>На проверку</Button>
+            <Button variant='contained' color='primary' onClick={sendToCheck}>На проверку</Button>
           </div>
         )}
 
-        {user.role.id === 3 && (
+        {((user.role.id === 3 && (orderFiles.at(-1) && orderFiles.at(-1).is_accepted === null))) && (
           <div className={classes.accept}>
             <Input
               placeholder='Type a message'
               className={classes.messageField}
+              value={comment}
+              onChange={changeInputValue(setComment)}
             />
 
             <div className={classes.buttons}>
-              <Button variant='contained' color='primary'>НА добработку</Button>
-              <Button variant='contained' color='primary'>Принять</Button>
+              <Button variant='contained' color='primary' onClick={orderDecline}>НА добработку</Button>
+              <Button variant='contained' color='primary' onClick={orderAccept}>Принять</Button>
             </div>
           </div>
         )}

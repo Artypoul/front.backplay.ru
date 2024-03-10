@@ -4,7 +4,8 @@ import {
   SHOW_CHAT,
   HIDE_CHAT,
   SEND_CHAT,
-  DELETE_CONVERSATION
+  DELETE_CONVERSATION,
+  FILL_MESSAGES
 } from './chatConstants';
 import { getDate, getTime } from '../../../helpers/dateTimeHelper';
 
@@ -19,10 +20,11 @@ const buildMessage = message => {
   const id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
   const newData = {
     id,
-    from: 'me',
-    date: getDate(),
-    time: getTime(),
-    message,
+    sender: {
+      id: message.userId,
+    },
+    date: Date.now(),
+    message: message.text,
   };
   return newData;
 };
@@ -32,7 +34,7 @@ const chatdReducer = (state = initialState, action = {}) => produce(state, draft
   switch (action.type) {
     case FETCH_CHAT_DATA:
       draft.chatList = action.items;
-      draft.activeChat = action.items[draft.chatSelected].chat;
+      draft.activeChat = action.items[draft.chatSelected].chat || [];
       break;
     case SHOW_CHAT: {
       const index = draft.chatList.findIndex((obj) => obj.id === action.person.id);
@@ -48,7 +50,21 @@ const chatdReducer = (state = initialState, action = {}) => produce(state, draft
       break;
     case SEND_CHAT: {
       const newMessage = buildMessage(action.message);
-      draft.chatList[draft.chatSelected].chat.push(newMessage);
+      const chat = draft.chatList[draft.chatSelected].chat;
+
+      if (!chat) {
+        draft.chatList[draft.chatSelected].chat = [newMessage];
+      } else {
+        draft.chatList[draft.chatSelected].chat.push(newMessage);
+      }
+
+      draft.activeChat = draft.chatList[draft.chatSelected].chat;
+      break;
+    }
+    case FILL_MESSAGES: {
+      const messages = action.messages;
+
+      draft.chatList[draft.chatSelected].chat = messages;
       draft.activeChat = draft.chatList[draft.chatSelected].chat;
       break;
     }

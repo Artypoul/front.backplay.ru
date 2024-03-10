@@ -14,6 +14,16 @@ import MessageField from './MessageField';
 import ChatHeader from './ChatHeader';
 import styles from './chatStyle-jss';
 
+const formateDate = (date) => {
+  return new Date(date).toLocaleDateString('ru-RU', {
+    month: 'short',
+    day: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
 function ChatRoom(props) {
   const field = useRef(null);
   const [message, setMessage] = useState('');
@@ -52,15 +62,18 @@ function ChatRoom(props) {
     dataContact,
     showMobileDetail,
     remove,
-    hideDetail
+    hideDetail,
+    userId,
   } = props;
 
   const getChat = dataArray => dataArray.map(data => {
     const renderHTML = { __html: data.message };
     return (
-      <li className={data.from === 'contact' ? classes.from : classes.to} key={data.id}>
-        <time dateTime={data.date + ' ' + data.time}>{data.date + ' ' + data.time}</time>
-        {data.from === 'contact' ? (
+      <li className={(data.sender && data.sender.id) !== userId ? classes.from : classes.to} key={data.id}>
+        <time dateTime={data.date + ' ' + data.time}>
+          {formateDate(data.date || data.created_at)}
+        </time>
+        {(data.sender && data.sender.id) !== userId ? (
           <Avatar alt="avatar" src={dataContact[chatSelected].avatar} className={classes.avatar} />
         ) : (
           <Avatar alt="avatar" src={dummyContents.user.avatar} className={classes.avatar} />

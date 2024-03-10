@@ -1,9 +1,18 @@
 import { apiGetFetcher } from "../../../../utils/axios";
 
-export const GetChats = async () => {
-  const {
-    users,
-  } = await apiGetFetcher('/users');
+export const GetChats = async (chatId) => {
+  const requests = [
+    apiGetFetcher('/users'),
+    apiGetFetcher('/chats'),
+  ];
 
-  return users;
+  const [
+    { users },
+    { chats },
+  ] = await Promise.all(requests);
+
+  return {
+    users,
+    chats,
+  };
 };

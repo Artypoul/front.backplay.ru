@@ -4,6 +4,8 @@ import brand from 'dan-api/dummy/brand';
 import imgData from 'dan-api/images/imgDataMasonry';
 import { PhotoGallery } from 'dan-components';
 import { GetProjectsRequest, GetTags } from './api';
+import { useDispatch } from 'react-redux';
+import { AddMusic } from '../../../redux/actions/player';
 
 function Photos() {
   const [projects, setProjects] = useState([]);
@@ -11,19 +13,24 @@ function Photos() {
   const [selectedTags, setSelectedTags] = useState({});
   const [pagination, setPagination] = useState({});
   const [page, setPage] = useState(1);
+  const [searchedValue, setSearchedValue] = useState('');
 
   const title = brand.name + ' - Projects';
   const description = brand.desc;
+
+  const dispatch = useDispatch()
 
   const getProjects = async () => {
     const {
       projects,
       total,
       pagination,
-    } = await GetProjectsRequest(page, selectedTags);
+    } = await GetProjectsRequest(page, selectedTags, searchedValue);
 
     setProjects(projects);
     setPagination(pagination);
+
+    dispatch(AddMusic(projects))
   };
 
   const getTags = async () => {
@@ -41,7 +48,7 @@ function Photos() {
     }
 
     getTags();
-  }, [selectedTags, page]);
+  }, [selectedTags, page, searchedValue]);
 
   return (
     <div>
@@ -61,6 +68,7 @@ function Photos() {
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
         setPage={setPage}
+        setSearchedValue={setSearchedValue}
       />
     </div>
   );

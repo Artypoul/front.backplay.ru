@@ -14,6 +14,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { prevArrow, nextArrow } from './icons';
 
 import { styles } from './player-jss';
+import { useDispatch } from 'react-redux';
+import { NextMusic, PrevMusic } from '../../redux/actions/player';
 
 const Player = (props) => {
   const {
@@ -22,8 +24,11 @@ const Player = (props) => {
   } = props;
 
   const [isStarted, setIsStarted] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [isSliderDrag, setIsSliderDrag] = useState(false);
   
   const ref = useRef(null);
+  const dispatch = useDispatch();
 
   const playStateHandler = () => {
     if (isStarted) {
@@ -38,30 +43,47 @@ const Player = (props) => {
   };
   
   const prev = () => {
-
+    dispatch(PrevMusic())
   };
 
   const next = () => {
-
+    dispatch(NextMusic())
   };
 
   const changeDuration = (event, newValue) => {
-    ref.current.currentTime = newValue;
+    if (!isSliderDrag) {
+      setIsSliderDrag(true)
+    }
+
+    setCurrentTime(newValue);
   };
 
   const changeVolume = (event, newValue) => {
     ref.current.volume  = (newValue / 100);
   };
 
+  const onTimeUpdateHandler = (event) => {
+    if (!isSliderDrag) {
+      setCurrentTime(event.target.currentTime);
+    }
+  };
+
+  const onChangeCommitted = (event, newValue) => {
+    ref.current.currentTime = newValue;
+    setIsSliderDrag(false);
+  };
+
   return (
     <div className={classes.background}>
-      <audio ref={ref} src={data.path} autoPlay={isStarted}></audio>
+      <audio ref={ref} src={data.path} autoPlay={isStarted} onTimeUpdate={onTimeUpdateHandler}></audio>
 
       <div className={classes.left}>
         <div className={classes.buttons}>
-          <SvgIcon className={classes.svg} viewBox='0 0 36 36'>
-            {prevArrow}
-          </SvgIcon>
+          <div onClick={prev}>
+            <SvgIcon className={classes.svg} viewBox='0 0 36 36'>
+              {prevArrow}
+            </SvgIcon>
+          </div>
 
           <Fab size='small' className={classes.play} onClick={playStateHandler}>
             {isStarted ? (
@@ -71,14 +93,16 @@ const Player = (props) => {
             )}
           </Fab>
 
-          <SvgIcon className={classes.svg} viewBox='0 0 36 36'>
-            {nextArrow}
-          </SvgIcon>
+          <div onClick={next}>
+            <SvgIcon className={classes.svg} viewBox='0 0 36 36'>
+              {nextArrow}
+            </SvgIcon>
+          </div>
         </div>
 
         <div className={classes.name}>
           <Typography component='h4' noWrap className={classes.title}>{data.name}</Typography>
-          <Typography component='p' className={classes.desc}>{data.singer} PREVIEW</Typography>
+          <Typography component='p' className={classes.desc}>{data.singer}</Typography>
         </div>
       </div>
       <div className={classes.center}>
@@ -88,7 +112,9 @@ const Player = (props) => {
           className={classes.slider}
           onChange={changeDuration}
           max={Math.floor(ref.current && ref.current.duration)}
-          defaultValue={0}
+          defaultValue={currentTime}
+          value={currentTime}
+          onChangeCommitted={onChangeCommitted}
         />
       </div>
       <div className={classes.right}>

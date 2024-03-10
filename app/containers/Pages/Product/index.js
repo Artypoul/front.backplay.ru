@@ -8,7 +8,7 @@ import AddIcon from '@material-ui/icons/Add';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import addBg from 'dan-images/utils/add-bg.svg';
 import React, { Fragment, useEffect, useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { useLocation, useHistory, useParams } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form';
 import Rating from '../../../components/Rating/Rating';
@@ -22,6 +22,7 @@ import { emptyVariant } from './consts';
 import { styles } from './product-jss';
 import { fillProduct } from '../../../redux/actions/product';
 import { Snackbar } from '@material-ui/core';
+import { PlayMusic } from '../../../redux/actions/player';
 
 const required = value => (value === null ? 'Required' : undefined);
 
@@ -52,6 +53,9 @@ const ProductPage = (props) => {
   const {id} = useParams();
   const history = useHistory();
 
+  const {
+    user,
+  } = useSelector(state => state.user);
   const dispatch = useDispatch();
 
   const isEdit = location.pathname.includes('edit');
@@ -220,6 +224,11 @@ const ProductPage = (props) => {
     getProject();
   }, [location.pathname]);
 
+
+  const onPlayHandler = () => {
+    dispatch(PlayMusic());
+  };
+
   const getImageContent = () => {
     if (isEdit || isCreate) {
       return (
@@ -239,7 +248,7 @@ const ProductPage = (props) => {
       <div className={classes.imgWrapper}>
         <img src={(product.preview && product.preview.path) || addBg} alt="" />
 
-        <Fab size="medium" color="secondary" aria-label="add" className={classes.buttonAdd}>
+        <Fab size="medium" color="secondary" aria-label="add" className={classes.buttonAdd} onClick={onPlayHandler}>
           <PlayArrowIcon />
         </Fab>
 
@@ -420,15 +429,17 @@ const ProductPage = (props) => {
           <Chip label={`Без баса ${product.price_without_bass}р`} className={classes.chipDiscount} />
         </div>
 
-        <div className={classes.buy}>
-          <Button
-            variant='contained'
-            color='secondary'
-            onClick={onBuyHandler}
-          >
-            купить
-          </Button>
-        </div>
+        {(user && user.role.id !== 2) && (
+          <div className={classes.buy}>
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={onBuyHandler}
+            >
+              купить
+            </Button>
+          </div>
+        )}
 
         <div
           className={classes.top}
@@ -448,7 +459,7 @@ const ProductPage = (props) => {
           }}
         >
           {variants.map((varinat) => (
-            <Button key={varinat.id} variant='outlined' color='secondary'>{varinat.key.name}</Button>
+            <Button key={varinat.id} variant='outlined' color='secondary'>{varinat.key && varinat.key.name}</Button>
           ))}
         </div>
 
@@ -459,7 +470,7 @@ const ProductPage = (props) => {
           }}
         >
           {variants.map((varinat) => (
-            <Button key={varinat.id} variant='outlined' color='secondary'>{varinat.change.name}</Button>
+            <Button key={varinat.id} variant='outlined' color='secondary'>{varinat.change && varinat.change.name}</Button>
           ))}
         </div>
       </div>

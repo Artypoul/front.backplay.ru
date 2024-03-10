@@ -12,6 +12,7 @@ import LeftSidebarBigLayout from './layouts/LeftSidebarBigLayout';
 import DropMenuLayout from './layouts/DropMenuLayout';
 import MegaMenuLayout from './layouts/MegaMenuLayout';
 import styles from './appStyles-jss';
+import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 
 const places = {
   '/shop': {
@@ -53,7 +54,15 @@ function Dashboard(props) {
   const [openGuide, setOpenGuide] = useState(false);
   const [appHeight, setAppHeight] = useState(0);
 
+  const navigate = useHistory();
+
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate.push('/login');
+      return;
+    }
+
     const { history, loadTransition } = props;
 
     // Adjust min height

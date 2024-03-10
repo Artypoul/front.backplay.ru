@@ -175,7 +175,8 @@ function Application(props) {
         <Route path="/app/charts/area-filled-charts" component={AreaFilledChart} />
         <Route path="/app/charts/radar-polar-chart" component={RadarPolarCharts} />
         { /* Sample Apps */ }
-        <Route path="/shop/checkout" component={CheckoutPage} />
+        {/* <Route path="/shop/checkout" component={CheckoutPage} /> */}
+        <Route path="/shop/checkout/:orderId" component={CheckoutPage} />
         <Route path="/shop/pages/product-detail" component={ProductPage} />
         <Route path="/shop/projects/:id" component={ProductPage} />
         {/* <Route path="/shop/projects/details" component={ProductPage} /> */}

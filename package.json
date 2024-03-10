@@ -141,6 +141,7 @@
     "mui-datatables": "^3.8.2",
     "organism-react-scroll-nav": "^0.15.0",
     "prop-types": "15.7.2",
+    "pusher-js": "^8.4.0-rc2",
     "rcolor": "^1.0.1",
     "react": "17.0.2",
     "react-animated-slider": "^2.0.0",
@@ -168,6 +169,7 @@
     "react-router-dom": "^5.2.0",
     "react-scroll-parallax": "^2.1.2",
     "react-slick": "^0.27.0",
+    "react-spring": "^8.0.27",
     "react-swipeable-views": "^0.14.0",
     "react-syntax-highlighter": "^15.4.4",
     "react-trello": "^2.2.11",
@@ -184,8 +186,7 @@
     "serve-favicon": "^2.4.5",
     "slick-carousel": "^1.8.1",
     "tunnel-agent": "^0.6.0",
-    "warning": "4.0.2",
-    "react-spring": "^8.0.27"
+    "warning": "4.0.2"
   },
   "devDependencies": {
     "@babel/cli": "7.17.0",

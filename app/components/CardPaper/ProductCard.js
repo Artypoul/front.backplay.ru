@@ -22,7 +22,7 @@ import styles from './cardStyle-jss';
 import { Link, useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
-import { AddMusic } from '../../redux/actions/player';
+import { AddMusic, PlayMusic } from '../../redux/actions/player';
 
 function ProductCard(props) {
   const {
@@ -43,6 +43,7 @@ function ProductCard(props) {
     isAdmin,
     open,
     demo,
+    productIndex,
   } = props;
 
   const dispatch = useDispatch();
@@ -70,8 +71,8 @@ function ProductCard(props) {
   };
 
   const onPlayArrowClick = () => {
-    demo.singer = desc;
-    dispatch(AddMusic(demo));
+    // demo.singer = desc;
+    dispatch(PlayMusic(productIndex));
   };
   
   const onTitleClick = () => open();

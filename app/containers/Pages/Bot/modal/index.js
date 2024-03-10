@@ -24,7 +24,9 @@ const Modal = (props) => {
   const {
     topItems,
     bottomItems,
+    variants,
   } = items;
+  console.log('items', items)
 
   return (
     <div className={`${classes.backgroundWrapper} ${isOpen && classes.opened}`}>
@@ -40,7 +42,7 @@ const Modal = (props) => {
             <div className={classes.items}>
               {(topItems || []).map((item, itemIndex) => (
                 // <div key={item.id} onClick={itemClickHandler(item.id)} className={classes.item}>{item.name}</div>
-                <div key={item.id} onClick={onSelect('key_id', item)} className={classes.item}>{item.name}</div>
+                <div key={item.id} onClick={onSelect('key_id', item)} className={classes.item}>{item.name || item.key.name}</div>
               ))}
             </div>
           </div>
@@ -50,7 +52,7 @@ const Modal = (props) => {
 
             <div className={classes.items}>
               {(bottomItems || []).map((item, itemIndex) => (
-                <div key={item.id} onClick={onSelect('change_id', item)} className={classes.item}>{item.name}</div>
+                <div key={item.id} onClick={onSelect('change_id', item)} className={classes.item}>{item.name || item.change.name}</div>
               ))}
             </div>
           </div>

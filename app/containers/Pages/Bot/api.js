@@ -16,23 +16,42 @@ export const MakeOrder = async (values) => {
   return order;
 };
 
-export const getProjectsInfo = async () => {
+export const getProjectsInfo = async (projectId) => {
   const requests = [
     apiGetFetcher('/keys'),
     apiGetFetcher('/changes'),
   ];
 
-  const [{keys}, {changes}] = await Promise.all(requests);
+  if (projectId) {
+    requests.push(...[
+      apiGetFetcher(`/projects/${projectId}`),
+      apiGetFetcher(`/projects/${projectId}/variants`),
+    ]);
+  }
 
-  return {
+  const [{ keys }, { changes }, ...rest] = await Promise.all(requests);
+
+  const responseData = {
     keys,
     changes,
   };
+
+  if (projectId) {
+    const [
+      { project },
+      { variants },
+    ] = rest;
+
+    responseData.project = project;
+    responseData.variants = variants;
+  }
+
+  return responseData;
 };
 
 export const LoadFile = async (demo) => {
   const formData = new FormData();
-  
+
   formData.append('file', demo);
   formData.append('file_type_id', 3);
 
@@ -48,10 +67,10 @@ export const GetHistory = async (orderId) => {
     apiGetFetcher(`/orders/${orderId}/steps`),
     apiGetFetcher(`/orders/${orderId}/files`),
   ];
-  
+
   const [
-    {steps},
-    {orderFiles},
+    { steps },
+    { orderFiles },
   ] = await Promise.all(requests);
 
   return {
@@ -60,26 +79,26 @@ export const GetHistory = async (orderId) => {
   };
 };
 
-export const SendToCheck = async (orderId) => {
+export const SendToCheck = async (orderId, values) => {
   const {
-    message,
-  } = await apiPostFetcher(`/orders/${orderId}/accept`);
+    orderFile,
+  } = await apiPostFetcher(`/orders/${orderId}/files`, values);
 
-  return message;
+  return orderFile;
 };
 
-export const OrderAccept = async (orderId, link) => {
+export const OrderAccept = async (orderId) => {
   const {
-    message,
-  } = await apiPostFetcher(`/orders/${orderId}/files`, link);
+    orderFile,
+  } = await apiPostFetcher(`/orders/${orderId}/accept`);
 
-  return message;
+  return orderFile;
 };
 
 export const OrderDecline = async (orderId, comment) => {
   const {
-    message,
+    orderFile,
   } = await apiPostFetcher(`/orders/${orderId}/decline`, comment);
 
-  return message;
+  return orderFile;
 };

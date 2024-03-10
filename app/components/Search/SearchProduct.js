@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -16,9 +16,33 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Cart from '../Cart/Cart';
 import styles from './search-jss';
 
+const useDebounce = (callback, delay) => {
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const debouncedCallback = (...args) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      callback(...args);
+    }, delay);
+  };
+
+  return debouncedCallback;
+};
+
 function SearchProduct(props) {
   const [anchorEl, setAnchorEl] = useState(null);
-
+  
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
   };
@@ -41,17 +65,25 @@ function SearchProduct(props) {
     listView
   } = props;
 
-  const getTotalResult = dataArray => {
-    let totalResult = 0;
-    for (let i = 0; i < dataArray.length; i += 1) {
-      if (dataArray[i].name === undefined) {
-        return false;
-      }
-      if ((dataArray[i].name).toLowerCase().indexOf(keyword) !== -1) {
-        totalResult += 1;
-      }
+  const debounce = useDebounce(search, 700)
+  // const getTotalResult = dataArray => {
+  //   let totalResult = 0;
+  //   for (let i = 0; i < dataArray.length; i += 1) {
+  //     if (dataArray[i].name === undefined) {
+  //       return false;
+  //     }
+  //     if ((dataArray[i].name).toLowerCase().indexOf(keyword) !== -1) {
+  //       totalResult += 1;
+  //     }
+  //   }
+  //   return totalResult;
+  // };
+
+  const onChangeHandler = (event) => {
+    const finalValue = event.target.value.trim();
+    if (finalValue.length >= 3) {
+      debounce(event.target.value);
     }
-    return totalResult;
   };
 
   return (
@@ -69,16 +101,17 @@ function SearchProduct(props) {
                 <div className={classes.search}>
                   <SearchIcon />
                 </div>
-                <input className={classes.input} placeholder="Search Product" onChange={(event) => search(event)} />
+                <input className={classes.input} placeholder="Search Product" onChange={onChangeHandler} />
               </div>
             </div>
 
             <Typography variant="caption" className={classes.result}>
-              {getTotalResult(dataProduct)} Results
+              {/* {getTotalResult(dataProduct)} Results */}
+              {dataProduct && dataProduct.length} Results
             </Typography>
           </div>
 
-          <div className={classes.right}>
+          {/* <div className={classes.right}>
             <Hidden mdDown>
               <div className={classes.toggleContainer}>
                 <ToggleButtonGroup value={listView} exclusive onChange={handleSwitchView}>
@@ -91,7 +124,7 @@ function SearchProduct(props) {
                 </ToggleButtonGroup>
               </div>
             </Hidden>
-          </div>
+          </div> */}
           {/* <div className={classes.cart}>
             <IconButton
               color="inherit"

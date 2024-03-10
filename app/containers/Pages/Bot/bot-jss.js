@@ -158,9 +158,14 @@ export const styles = theme => ({
   file: {
     cursor: 'pointer',
     
+    display: 'flex',
+    alignItems: 'center',
+    gap: 12,
+
     '&>input': {
       display: 'none',
     },
+    
     '&>button': {
       pointerEvents: 'none',
     }
@@ -191,5 +196,15 @@ export const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     gap: 63,
+  },
+  // file: {
+  //   display: 'flex',
+  //   alignItems: 'center',
+  //   gap: 12,
+  // },
+  fileWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
   },
 });

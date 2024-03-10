@@ -2,6 +2,7 @@ import React from 'react';
 
 import Chip from '@material-ui/core/Chip';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import Sum from '../components/Sum';
 
 export const columns = [
   {
@@ -53,15 +54,10 @@ export const columns = [
     options: {
       filter: true,
       customBodyRender: (value) => {
-        const nf = new Intl.NumberFormat('ru-Ru', {
-          style: 'currency',
-          currency: 'RUB',
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        });
-
-        return nf.format(value);
-      }
+        return (
+          <Sum data={value} />
+        );
+      },
     }
   },
 ];

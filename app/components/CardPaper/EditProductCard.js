@@ -37,7 +37,7 @@ function EditProductCard(props) {
     }
     
     history.push({
-      pathname: `/shop/chat/1`,
+      pathname: `/shop/bot/null/3`,
     });
   };
   

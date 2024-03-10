@@ -1,12 +1,16 @@
 import { apiGetFetcher } from "../../../utils/axios";
 
-export const GetProjectsRequest = async (page, tags) => {
+export const GetProjectsRequest = async (page, tags, searchedValue) => {
   let result = '';
   Object.keys(tags).forEach((key) => {
     if (tags[key]) {
       result += `&tag_id[]=${key}`;
     }
   });
+
+  if (searchedValue.length) {
+    result += `&query=${searchedValue}`;
+  }
   
   const {
     projects,

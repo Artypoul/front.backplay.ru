@@ -12,32 +12,32 @@ import Divider from '@material-ui/core/Divider';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
 import imgApi from 'dan-api/images/photos';
 
-const dataCart = [
-  {
-    name: 'Product 1',
-    thumb: imgApi[21],
-    price: 9.99,
-    quantity: 1
-  },
-  {
-    name: 'Product 1',
-    thumb: imgApi[22],
-    price: 2.34,
-    quantity: 1
-  },
-  {
-    name: 'Product 1',
-    thumb: imgApi[23],
-    price: 10.00,
-    quantity: 2
-  },
-  {
-    name: 'Product 1',
-    thumb: imgApi[24],
-    price: 7.99,
-    quantity: 3
-  },
-];
+// const dataCart = [
+//   {
+//     name: 'Product 1',
+//     thumb: imgApi[21],
+//     price: 9.99,
+//     quantity: 1
+//   },
+//   {
+//     name: 'Product 1',
+//     thumb: imgApi[22],
+//     price: 2.34,
+//     quantity: 1
+//   },
+//   {
+//     name: 'Product 1',
+//     thumb: imgApi[23],
+//     price: 10.00,
+//     quantity: 2
+//   },
+//   {
+//     name: 'Product 1',
+//     thumb: imgApi[24],
+//     price: 7.99,
+//     quantity: 3
+//   },
+// ];
 
 const styles = theme => ({
   listItem: {
@@ -87,16 +87,21 @@ const styles = theme => ({
 });
 
 function SideReview(props) {
-  const { classes } = props;
+  const {
+    classes,
+    items,
+    totalPrice,
+  } = props;
+
   const getCartItem = dataArray => dataArray.map((item, index) => (
     <Fragment key={index.toString()}>
       <ListItem>
         <figure className={classes.thumb}>
-          <img src={item.thumb} alt="thumb" />
+          <img src={item.img} alt="thumb" />
         </figure>
         <ListItemText
           primary={item.name}
-          secondary={`Quantity: ${item.quantity} Item - USD ${item.price * item.quantity}`}
+          secondary={item.description}
           className={classes.itemText}
         />
       </ListItem>
@@ -105,20 +110,21 @@ function SideReview(props) {
       </li>
     </Fragment>
   ));
+
   return (
     <Paper className={classes.paper} elevation={0}>
       <Typography variant="h6" gutterBottom>
         <ShoppingCart />
-        &nbsp; Order Summary
+        &nbsp; Краткое описание заказа
       </Typography>
       <List component="ul">
-        {getCartItem(dataCart)}
+        {getCartItem(items)}
+
         <ListItem className={classes.totalPrice}>
           <Typography variant="h6">
-            Total :&nbsp;
+            Общая стоимость : &nbsp;
             <span>
-              <small>$</small>
-              <strong className={Type.bold}>34.06</strong>
+              <strong className={Type.bold}>{totalPrice}р</strong>
             </span>
           </Typography>
         </ListItem>

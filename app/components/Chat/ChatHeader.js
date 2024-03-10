@@ -44,6 +44,9 @@ function ChatHeader(props) {
     showMobileDetail,
     hideDetail,
   } = props;
+
+  const contact = dataContact[chatSelected];
+
   return (
     <AppBar
       position="absolute"
@@ -61,13 +64,11 @@ function ChatHeader(props) {
         )}
         {dataContact.length > 0 && (
           <Fragment>
-            <Avatar alt="avatar" src={dataContact[chatSelected].avatar} className={classes.avatar} />
+            <Avatar alt="avatar" src={contact.avatar} className={classes.avatar} />
             <Typography variant="h6" component="h2" color="inherit" noWrap>
-              {dataContact[chatSelected].name}
+              {`${contact.first_name} ${contact.last_name}`}
               <Typography variant="caption" display="block" className={classes.status} color="inherit" noWrap>
-                <span className={classes.online} />
-                  &nbsp;Online
-              </Typography>
+                <span className={classes.online} />{contact.is_online ? 'В сети' : 'Офлайн'}</Typography>
             </Typography>
           </Fragment>
         )}

@@ -4,6 +4,9 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import { reduxForm, Field, } from 'redux-form';
+import { TextFieldRedux } from './textFieldRedux';
+import { useSelector } from 'react-redux';
 
 function AddressForm(props) {
   const {
@@ -11,71 +14,74 @@ function AddressForm(props) {
     fields,
   } = props;
 
+  const {
+    user,
+  } = useSelector(state => state.user);
+
   return (
     <Fragment>
       <Typography variant="h6" gutterBottom>
         {title}
       </Typography>
       <Grid container spacing={3}>
-        {/* {fields.map((field, index) => (
-        ))} */}
         <Grid item xs={12} sm={6}>
-          <TextField
+          <Field
+            name='last_name'
+            component={TextFieldRedux}
+            type='text'
+            label='Фамилия'
+            placeholder='Фамилия'
             required
-            id="firstName"
-            name="firstName"
-            label="First name"
             fullWidth
-            autoComplete="fname"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
+          <Field
+            name='first_name'
+            component={TextFieldRedux}
+            type='text'
+            label='Имя'
+            placeholder='Имя'
             required
-            id="lastName"
-            name="lastName"
-            label="Last name"
             fullWidth
-            autoComplete="lname"
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
+          <Field
+            name='address'
+            component={TextFieldRedux}
+            type='text'
+            label='Адрес'
+            placeholder='Адрес'
             required
-            id="address1"
-            name="address1"
-            label="Address line 1"
             fullWidth
-            autoComplete="billing address-line1"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="city"
-            name="city"
-            label="City"
+          <Field
+            name={user.role.id === 2 ? 'seller_name' : 'brand_name'}
+            component={TextFieldRedux}
+            type='text'
+            label='Название коллектива'
+            placeholder='Название коллектива'
             fullWidth
-            autoComplete="billing address-level2"
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField id="state" name="state" label="State/Province/Region" fullWidth />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
+          <Field
+            name='phone'
+            component={TextFieldRedux}
+            type='text'
+            label='Телефон'
+            placeholder='Телефон'
             required
-            id="address1"
-            name="address1"
-            label="Address line 1"
             fullWidth
-            autoComplete="billing address-line1"
           />
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel
-            control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-            label="Use this address for payment details"
+            control={<Checkbox required color="secondary" name="saveAddress" value="yes" />}
+            label="Согласен на обработку персональных данных"
           />
         </Grid>
       </Grid>

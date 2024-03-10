@@ -40,11 +40,11 @@ const Filter = (props) => {
 
   return (
     <div className={classes.wrapper}>
-      <Fab size='small' style={{minWidth: 40,}}>
+      {/* <Fab size='small' style={{minWidth: 40,}}>
         <IconButton className={classes.iconButton}>
           <FavoriteOutlinedIcon />
         </IconButton>
-      </Fab>
+      </Fab> */}
 
       <div className={classes.itemsWrapper}>
         <div className={classes.items}>
@@ -65,13 +65,6 @@ const Filter = (props) => {
               {filterItem.name}
             </Button>
           ))}
-          {/* <Button
-            variant='contained'
-            className={`${classes.item} ${selectedItems['-1'] && 'active'}`}
-            onClick={changeFilterItems(-1)}
-          >
-            Разное
-          </Button> */}
         </div>
       </div>
     </div>

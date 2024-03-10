@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './photo-jss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Pagination from '../Pagination/Pagination';
+import { UpdateMusicIndex } from '../../redux/actions/player';
 
 function PhotoGallery(props) {
   const {
@@ -17,6 +18,7 @@ function PhotoGallery(props) {
     selectedTags,
     setSelectedTags,
     setPage,
+    setSearchedValue,
   } = props;
 
   const {
@@ -25,10 +27,11 @@ function PhotoGallery(props) {
   } = useSelector(state => state.user);
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const addToCart = (item) => {
     return async () => {
-      history.push(`/shop/bot`);
+      history.push(`/shop/bot/${item.id}/1`);
     };
   };
 
@@ -38,35 +41,23 @@ function PhotoGallery(props) {
     };
   };
 
-  const handleOpenProject = (projectID) => {
-    return () => history.push(`/shop/projects/${projectID}`);
+  const handleOpenProject = (projectID, index) => {
+    return () => {
+      history.push(`/shop/projects/${projectID}`)
+      dispatch(UpdateMusicIndex(index));
+    };
   };
 
-  const onChange = (page) => {
-    setPage(page);
-  }
-
-  const onPrev = (page) => {
-    setPage(page);
-  }
-
-  const onNext = (page) => {
-    setPage(page);
-  }
-
-  const onGoFirst = (page) => {
-    setPage(page);
-  }
-
-  const onGoLast = (page) => {
-    setPage(page);
-  }
+  const searchHandler = (value) => {
+    setSearchedValue(value);
+  };
 
   return (
     <div>
       <SearchProduct
-        dataProduct={[]}
+        dataProduct={projects}
         listView='grid'
+        search={searchHandler}
       />
 
       <Filter
@@ -91,9 +82,10 @@ function PhotoGallery(props) {
             soldout={project.soldout}
             addToCart={addToCart(project)}
             edit={editProject(project.id)}
-            open={handleOpenProject(project.id)}
+            open={handleOpenProject(project.id, index)}
             isAdmin={isAdmin}
             demo={project.demo}
+            productIndex={index}
           />
         ))}
       </div>
@@ -102,11 +94,11 @@ function PhotoGallery(props) {
         <Pagination
           curpage={pagination.current_page || 0}
           totpages={pagination.total_pages || 1}
-          onChange={onChange}
-          onPrev={onPrev}
-          onNext={onNext}
-          onGoFirst={onGoFirst}
-          onGoLast={onGoLast}
+          onChange={setPage}
+          onPrev={setPage}
+          onNext={setPage}
+          onGoFirst={setPage}
+          onGoLast={setPage}
         />
       )}
     </div>
