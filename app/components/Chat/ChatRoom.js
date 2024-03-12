@@ -94,7 +94,7 @@ function ChatRoom(props) {
         hideDetail={hideDetail}
       />
       <ul className={classes.chatList} id="roomContainer">
-        {dataChat.length > 0 ? getChat(dataChat) : (<Typography display="block" variant="caption" className={Type.textCenter}>{'You haven\'t made any conversation yet'}</Typography>)}
+        {dataChat ? getChat(dataChat) : (<Typography display="block" variant="caption" className={Type.textCenter}>{'You haven\'t made any conversation yet'}</Typography>)}
       </ul>
       <Paper className={classes.writeMessage}>
         <MessageField

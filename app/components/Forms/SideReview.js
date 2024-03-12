@@ -11,6 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import ShoppingCart from '@material-ui/icons/ShoppingCart';
 import imgApi from 'dan-api/images/photos';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 // const dataCart = [
 //   {
@@ -42,6 +43,15 @@ import imgApi from 'dan-api/images/photos';
 const styles = theme => ({
   listItem: {
     padding: `${theme.spacing(1)}px 0`,
+    gap: 16,
+    alignItems: 'flex-start',
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      textAlign: 'center',
+    },
   },
   total: {
     fontWeight: '700',
@@ -58,20 +68,25 @@ const styles = theme => ({
   paper: {
     background: theme.palette.type === 'dark' ? darken(theme.palette.secondary.main, 0.5) : lighten(theme.palette.secondary.light, 0.5),
     padding: theme.spacing(2),
-    height: 550,
     overflow: 'auto',
     '& h6': {
       textAlign: 'center',
     }
   },
   thumb: {
-    width: 120,
-    height: 70,
-    marginRight: theme.spacing(2),
     overflow: 'hidden',
     borderRadius: theme.rounded.small,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    objectFit: 'cover',
+    maxWidth: 120,
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '100%',
+    },
     '& img': {
-      maxWidth: '100%'
+      maxWidth: '100%',
+      aspectRatio: '5 / 3',
     }
   },
   totalPrice: {
@@ -83,7 +98,7 @@ const styles = theme => ({
         fontSize: 28
       }
     },
-  }
+  },
 });
 
 function SideReview(props) {
@@ -95,7 +110,7 @@ function SideReview(props) {
 
   const getCartItem = dataArray => dataArray.map((item, index) => (
     <Fragment key={index.toString()}>
-      <ListItem>
+      <ListItem className={classes.listItem}>
         <figure className={classes.thumb}>
           <img src={item.img} alt="thumb" />
         </figure>
@@ -103,6 +118,18 @@ function SideReview(props) {
           primary={item.name}
           secondary={item.description}
           className={classes.itemText}
+          primaryTypographyProps={{
+            style: {
+              whiteSpace: 'pre-wrap',
+              wordWrap: 'break-word',
+            }
+          }}
+          secondaryTypographyProps={{
+            style: {
+              whiteSpace: 'pre-wrap',
+              wordWrap: 'break-word',
+            }
+          }}
         />
       </ListItem>
       <li>
@@ -124,7 +151,7 @@ function SideReview(props) {
           <Typography variant="h6">
             Общая стоимость : &nbsp;
             <span>
-              <strong className={Type.bold}>{totalPrice}р</strong>
+              <strong className={Type.bold}>{formatCurrency(totalPrice)}</strong>
             </span>
           </Typography>
         </ListItem>

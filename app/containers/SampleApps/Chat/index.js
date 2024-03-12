@@ -81,14 +81,14 @@ function Chat(props) {
   }, []);
 
   const chatInitialization = async () => {
-    if (!chats.length || !dataContact.length) {
-      const chat = await CreateChat({
-        user_id: dataContact[chatSelected].id,
-      });
+    // if (!chats.length || !dataContact.length) {
+    //   const chat = await CreateChat({
+    //     user_id: dataContact[chatSelected].id,
+    //   });
 
-      chatId = chat.id;
-      return;
-    }
+    //   chatId = chat.id;
+    //   return;
+    // }
 
     chatId = chats.find((chat) => {
       const currentChat = dataContact[chatSelected];
@@ -109,6 +109,10 @@ function Chat(props) {
   };
 
   useEffect(() => {
+    if (!chats.length || !dataContact.length) {
+      return;
+    }
+
     chatInitialization();
   }, [chats, dataContact, chatSelected]);
 

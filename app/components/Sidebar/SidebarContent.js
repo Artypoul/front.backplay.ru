@@ -13,6 +13,7 @@ import logo from 'dan-images/logo.svg';
 import MainMenu from './MainMenu';
 import styles from './sidebar-jss';
 import { useSelector } from 'react-redux';
+import link from 'dan-api/ui/link';
 
 function SidebarContent(props) {
   const {user} = useSelector(state => state.user);
@@ -63,7 +64,7 @@ function SidebarContent(props) {
   return (
     <div className={classNames(classes.drawerInner, !drawerPaper ? classes.drawerPaperClose : '')}>
       <div className={classes.drawerHeader}>
-        <NavLink to="/app" className={classNames(classes.brand, classes.brandBar, turnDarker && classes.darker)}>
+        <NavLink to={link.dashboard} className={classNames(classes.brand, classes.brandBar, turnDarker && classes.darker)}>
           <img src={logo} alt={brand.name} />
           {brand.name}
         </NavLink>

@@ -1,13 +1,17 @@
-module.exports = {
-  dashboard: '/app',
-  login: '/login',
+import { HOME, LOGIN, PROFILE } from '../../utils/routes';
+
+const routes = {
+  dashboard: HOME,
+  login: LOGIN,
   market: '#',
-  email: '/app/pages/email',
-  profile: '/shop/profile',
-  calendar: '/app/pages/calendar',
+  email: '#',
+  profile: PROFILE,
+  calendar: '#',
   twitter: '#',
   github: '#',
   pinterest: '#',
   linkedin: '#',
   buy: '#',
 };
+
+export default routes;

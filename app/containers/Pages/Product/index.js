@@ -22,7 +22,9 @@ import { emptyVariant } from './consts';
 import { styles } from './product-jss';
 import { fillProduct } from '../../../redux/actions/product';
 import { Snackbar } from '@material-ui/core';
-import { PlayMusic } from '../../../redux/actions/player';
+import { PlayMusic, PlayMusicInnerProduct } from '../../../redux/actions/player';
+import { formatCurrency } from '../../../utils/formatCurrency';
+import { BOT, PROJECT } from '../../../utils/routes';
 
 const required = value => (value === null ? 'Required' : undefined);
 
@@ -202,7 +204,7 @@ const ProductPage = (props) => {
     if (isCreate) {
       const createdProject = await CreateProjectRequest(requestData);
       history.push({
-        pathname: `/shop/projects/${createdProject.id}`,
+        pathname: `${PROJECT}/${createdProject.id}`,
       });
 
       return;
@@ -210,13 +212,13 @@ const ProductPage = (props) => {
     
     const updatedProject = await UpdateProjectRequest(requestData);
       history.push({
-        pathname: `/shop/projects/${updatedProject.id}`,
+        pathname: `${PROJECT}/${updatedProject.id}`,
       });
   };
 
   const onBuyHandler = () => {
     history.push({
-      pathname: `/shop/bot/${product.id}/1`,
+      pathname: `${BOT}/${product.id}/1`,
     });
   };
 
@@ -226,7 +228,7 @@ const ProductPage = (props) => {
 
 
   const onPlayHandler = () => {
-    dispatch(PlayMusic());
+    dispatch(PlayMusicInnerProduct(product.demo));
   };
 
   const getImageContent = () => {
@@ -252,7 +254,7 @@ const ProductPage = (props) => {
           <PlayArrowIcon />
         </Fab>
 
-        <div className={classes.label}>{product.singer}</div>
+        <div className={classes.label}>{product.seller_name}</div>
       </div>
     );
   };
@@ -358,14 +360,14 @@ const ProductPage = (props) => {
                           color={(variant.key_id || (variant.key && variant.key.id)) ? 'primary' : 'default'}
                           onClick={openModal(setIsKeyModalOpened, variantIndex)}
                         >
-                          + ключ
+                          {variant.key_id_name || (variant.key && variant.key.name) || '+ ключ'}
                         </Button>
                         <Button
                           variant='contained'
                           color={(variant.change_id || (variant.change && variant.change.id)) ? 'primary' : 'default'}
                           onClick={openModal(setIsChangeModalOpened, variantIndex)}
                         >
-                          + изменения
+                          {variant.change_id_name || (variant.change && variant.change.name) || '+ изменения'}
                         </Button>
                       </div>
                     </div>
@@ -424,9 +426,9 @@ const ProductPage = (props) => {
       <div className={classes.rightContent}>
         <div className={classes.price}>
           <Typography variant='caption' component='span' className={classes.value}>
-            {product.price}р
+            {formatCurrency(product.price)}
           </Typography>
-          <Chip label={`Без баса ${product.price_without_bass}р`} className={classes.chipDiscount} />
+          <Chip label={`Без баса ${formatCurrency(product.price_without_bass)}`} className={classes.chipDiscount} />
         </div>
 
         {(user && user.role.id !== 2) && (

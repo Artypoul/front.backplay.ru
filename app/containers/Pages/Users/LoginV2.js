@@ -11,6 +11,7 @@ import { useHistory } from 'react-router-dom';
 import { LoginRequest, SendPasswordRequest } from './api';
 import { useDispatch } from 'react-redux';
 import { userInit } from '../../../redux/actions/user';
+import { HOME } from '../../../utils/routes';
 
 function LoginV2(props) {
   const history = useHistory()
@@ -25,7 +26,7 @@ function LoginV2(props) {
 
     if (user) {
       dispatch(userInit(user));
-      history.push('/shop');
+      history.push(HOME);
     }
   };
 

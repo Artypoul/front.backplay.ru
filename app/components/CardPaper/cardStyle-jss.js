@@ -71,6 +71,13 @@ const styles = theme => ({
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'space-between',
+    cursor: 'pointer',
+    transition: 'transform .125s linear',
+
+    '&:hover': {
+      transform: 'scale(1.02)',
+    },
   },
   mediaWrapper: {
     position: 'relative',

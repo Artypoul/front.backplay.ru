@@ -23,6 +23,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { Box } from '@material-ui/core';
 import { useDispatch } from 'react-redux';
 import { AddMusic, PlayMusic } from '../../redux/actions/player';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 function ProductCard(props) {
   const {
@@ -44,6 +45,7 @@ function ProductCard(props) {
     open,
     demo,
     productIndex,
+    label,
   } = props;
 
   const dispatch = useDispatch();
@@ -71,7 +73,6 @@ function ProductCard(props) {
   };
 
   const onPlayArrowClick = () => {
-    // demo.singer = desc;
     dispatch(PlayMusic(productIndex));
   };
   
@@ -112,27 +113,24 @@ function ProductCard(props) {
         </div>
       </CardContent>
       <CardActions className={classes.price}>
-        <Box fontWeight={600} fontSize={24}>
+        <Box fontWeight={600} fontSize={20}>
           {price && (
             <span>
-              {price || 0}Р
+              {formatCurrency(price) || 0}
             </span>
           )}
         </Box>
         {prevPrice > 0 && (
           <Typography variant="caption" component="h5">
             <span>
-              {prevPrice}P
+              {formatCurrency(prevPrice)}
             </span>
           </Typography>
         )}
         <div className={classes.rightAction}>
           <Typography variant="caption" component="h5" className={classes.actionButton}>
-            Playback Version
+            {label}
           </Typography>
-          {/* <Button size="small" variant="outlined" color='secondary'>
-            Playback Version
-          </Button> */}
         </div>
       </CardActions>
     </Card>

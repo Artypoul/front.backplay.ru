@@ -19,6 +19,12 @@ import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 const requestData = {};
 let createdOrderId = null;
 
+const titles = {
+  1: 'Автоматическое оформление заказа',
+  2: 'Автоматическое изменения тональности',
+  3: 'Оформление индивидуального заказа, срок исполнения 14 дней',
+}
+
 const Bot = (props) => {
   const {
     classes,
@@ -73,6 +79,7 @@ const Bot = (props) => {
       setSteps((prev) => {
         const newArray = Array.from(prev);
         newArray[step - 1].answer = item[keyName] ? item[keyName].name : item.name;
+        newArray[step].isBass = item.with_bass;
 
         return newArray;
       });
@@ -97,7 +104,6 @@ const Bot = (props) => {
     };
   };
 
-  console.log('step', step)
   const handleDrumbsState = (value) => {
     return async () => {
       requestData.with_drums = value;
@@ -311,6 +317,7 @@ const Bot = (props) => {
     );
   };
 
+  const isStepBass = steps[step - 1] && steps[step - 1].isBass;
   const actions = {
     1: {
       1: {
@@ -322,10 +329,10 @@ const Bot = (props) => {
       },
       2: {
         title: 'Выбор варинта',
-        buttons: [{
+        buttons: isStepBass ? [{
           title: 'С басом',
           action: handleBassState(true),
-        }, {
+        }] : [{
           title: 'Без баса',
           action: handleBassState(false),
         }],
@@ -459,7 +466,7 @@ const Bot = (props) => {
           </div>
 
           <div className={classes.title}>
-            <h3>Автоматическое оформление заказа</h3>
+            <h3>{titles[+type]}</h3>
             <span className={classes.status}>Online</span>
           </div>
         </div>

@@ -7,6 +7,7 @@ import styles from './photo-jss';
 import { useDispatch, useSelector } from 'react-redux';
 import Pagination from '../Pagination/Pagination';
 import { UpdateMusicIndex } from '../../redux/actions/player';
+import { BOT, PROJECT } from '../../utils/routes';
 
 function PhotoGallery(props) {
   const {
@@ -31,20 +32,19 @@ function PhotoGallery(props) {
 
   const addToCart = (item) => {
     return async () => {
-      history.push(`/shop/bot/${item.id}/1`);
+      history.push(`${BOT}/${item.id}/1`);
     };
   };
 
   const editProject = (projectID) => {
     return () => {
-      history.push(`/shop/projects/${projectID}/edit`);
+      history.push(`${PROJECT}/${projectID}/edit`);
     };
   };
 
   const handleOpenProject = (projectID, index) => {
     return () => {
-      history.push(`/shop/projects/${projectID}`)
-      dispatch(UpdateMusicIndex(index));
+      history.push(`${PROJECT}/${projectID}`);
     };
   };
 
@@ -67,7 +67,7 @@ function PhotoGallery(props) {
         onFilter={setProjects}
       />
 
-      <div className={`${classes.masonry} ${!projects.length && 'empty'}`}>
+      <div className={`${classes.masonry}`}>
         <EditProductCard isAdmin={isAdmin} />
 
         {projects.map((project, index) => (
@@ -86,6 +86,7 @@ function PhotoGallery(props) {
             isAdmin={isAdmin}
             demo={project.demo}
             productIndex={index}
+            label={project.seller_name}
           />
         ))}
       </div>

@@ -1,4 +1,4 @@
-import { ADD, NEXT, PLAY, PREV, REMOVE, UPDATE_MUSIC_INDEX } from "../constants/player";
+import { ADD, NEXT, PLAY, PLAY_INNER, PREV, REMOVE, UPDATE_MUSIC_INDEX } from "../constants/player";
 
 export const AddMusic = (data) => ({
   type: ADD,
@@ -7,6 +7,11 @@ export const AddMusic = (data) => ({
 
 export const PlayMusic = (data) => ({
   type: PLAY,
+  payload: data,
+});
+
+export const PlayMusicInnerProduct = (data) => ({
+  type: PLAY_INNER,
   payload: data,
 });
 

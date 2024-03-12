@@ -1,25 +1,9 @@
 const styles = theme => ({
   masonry: { /* Masonry container */
-    [theme.breakpoints.up('sm')]: {
-      columnCount: 2,
-    },
-    [theme.breakpoints.up('md')]: {
-      columnCount: 3,
-    },
     gap: 12,
-    columnFill: 'initial',
     marginTop: 24,
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(347px, 1fr))',
-    '&.empty': {
-      gridTemplateColumns: 347,
-      [theme.breakpoints.down('md')]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(309px, 1fr))',
-      },
-    },
-    [theme.breakpoints.down('xs')]: {
-      gridTemplateColumns: 'repeat(auto-fit, minmax(309px, 1fr))',
-    },
+    gridTemplateColumns: 'repeat(auto-fill, minmax(335px, 1fr))',
   },
   item: {
     display: 'inline-block',

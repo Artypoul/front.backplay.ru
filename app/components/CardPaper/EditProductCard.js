@@ -13,6 +13,7 @@ import React from 'react';
 import cardBg from 'dan-images/utils/editCardBg.svg';
 import styles from './cardStyle-jss';
 import { useHistory } from 'react-router-dom';
+import { BOT, CREATE_PROJECT } from '../../utils/routes';
 
 function EditProductCard(props) {
   const {
@@ -30,14 +31,14 @@ function EditProductCard(props) {
   const playButtonHandler = () => {
     if (isAdmin) {
       history.push({
-        pathname: `/shop/projects/create`,
+        pathname: CREATE_PROJECT,
       });
       
       return;
     }
     
     history.push({
-      pathname: `/shop/bot/null/3`,
+      pathname: `${BOT}/0/3`,
     });
   };
   

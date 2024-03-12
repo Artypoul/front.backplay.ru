@@ -23,7 +23,8 @@ const Modal = (props) => {
     return () => {
       updateVariant(prev => {
         const copiedVariant = Object.assign({}, prev[variant]);
-        copiedVariant[keyIndex] = value;
+        copiedVariant[keyIndex] = value.id;
+        copiedVariant[`${keyIndex}_name`] = value.name;
     
         const newArray = Array.from(prev);
         newArray[variant] = copiedVariant;
@@ -46,7 +47,7 @@ const Modal = (props) => {
 
           <div className={classes.items}>
             {items.map((item, itemIndex) => (
-              <div key={item.id} onClick={itemClickHandler(item.id)} className={classes.item}>{item.name}</div>
+              <div key={item.id} onClick={itemClickHandler(item)} className={classes.item}>{item.name}</div>
             ))}
           </div>
         </div>

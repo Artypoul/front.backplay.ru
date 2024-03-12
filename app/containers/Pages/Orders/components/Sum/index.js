@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import { styles } from './sum-jss';
 import { useHistory } from 'react-router-dom';
+import { BOT, ORDER, PROJECT } from '../../../../../utils/routes';
 
 const nf = new Intl.NumberFormat('ru-Ru', {
   style: 'currency',
@@ -45,13 +46,13 @@ const Sum = (props) => {
 
       switch (item) {
         case menuItems[0]:
-          history.push(`/shop/orders/`)
+          history.push(`${PROJECT}/${data.project_id}`)
           break;
         case menuItems[1]:
-          history.push(`/shop/bot/${data.id}/2`);
+          history.push(`${BOT}/${data.id}/2`);
           break;
         case menuItems[2]:
-          history.push(`/shop/order/${data.id}`);
+          history.push(`${ORDER}/${data.id}`);
           break;
         case menuItems[3]:
           

@@ -13,7 +13,7 @@ function Auth() {
     <Outer>
       <Switch>
         <Route path="/login" component={LoginV2} />
-        <Route path="/reset-password" component={ResetPassword} />
+        {/* <Route path="/reset-password" component={ResetPassword} /> */}
         <Route path="/lock-screen" component={LockScreen} />
         <Route component={NotFound} />
       </Switch>

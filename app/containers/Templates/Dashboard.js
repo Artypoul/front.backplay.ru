@@ -13,68 +13,69 @@ import DropMenuLayout from './layouts/DropMenuLayout';
 import MegaMenuLayout from './layouts/MegaMenuLayout';
 import styles from './appStyles-jss';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { BOT, CHAT, CHECKOUT, CREATE_PROJECT, HOME, ORDERS, PROFILE, PROJECT } from '../../utils/routes';
 
 const places = {
-  '/shop': {
+  [HOME]: {
     name: 'Магазин',
-    path: '/shop',
+    path: HOME,
   },
-  '/shop/orders': {
+  [ORDERS]: {
     name: 'Заказы',
-    path: '/ordes',
+    path: ORDERS,
   },
-  '/shop/chat': {
-    path: '/chat',
+  [CHAT]: {
     name: 'Чат',
+    path: CHAT,
   },
-  '/shop/product/create': {
-    path: '/shop/product/create',
+  [CREATE_PROJECT]: {
     name: 'Добавление нового проекта',
+    path: CREATE_PROJECT,
   },
-  '/shop/product/details': {
-    path: '/shop/product/details',
+  [`${PROJECT}/details`]: {
     name: 'Карточка проекта',
+    path: PROJECT,
   },
-  '/shop/product/edit': {
-    path: '/shop/product/edit',
+  [`${PROJECT}/edit`]: {
     name: 'Редактирование проекта',
+    path: PROJECT,
   },
-  '/shop/checkout': {
-    path: '/shop/checkout',
+  [`${CHECKOUT}/details`]: {
     name: 'Оформление заказа',
+    path: CHECKOUT,
   },
-  '/shop/profile': {
-    path: '/shop/profile',
+  [PROFILE]: {
     name: '',
+    path: PROFILE,
+  },
+  [`${BOT}/auto`]: {
+    name: 'Автоматическое оформление заказа',
+    path: PROFILE,
+  },
+  [`${BOT}/change`]: {
+    name: 'Заказ новой тональности',
+    path: PROFILE,
+  },
+  [`${BOT}/individual`]: {
+    name: 'Индивидуальный заказ мультитрека',
+    path: PROFILE,
   },
 };
 
 function Dashboard(props) {
-  // Initial header style
   const [openGuide, setOpenGuide] = useState(false);
   const [appHeight, setAppHeight] = useState(0);
 
-  const navigate = useHistory();
-
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate.push('/login');
-      return;
-    }
-
     const { history, loadTransition } = props;
 
-    // Adjust min height
     setAppHeight(window.innerHeight + 112);
 
-    // Set expanded sidebar menu
     const currentPath = history.location.pathname;
     props.initialOpen(currentPath);
-    // Play page transition
+
     loadTransition(true);
 
-    // Execute all arguments when page changes
     const unlisten = history.listen(() => {
       window.scrollTo(0, 0);
       setTimeout(() => {
@@ -112,16 +113,56 @@ function Dashboard(props) {
     layout,
     changeMode
   } = props;
-  const titleException = ['/app', '/app/crm-dashboard', '/app/crypto-dashboard'];
-  const parts = history.location.pathname.split('/');
-  // const place = parts[parts.length - 1].replace('-', ' ');
-  const place = places[history.location.pathname] || {
-    name: 'default',
-    path: '',
+
+  const titleException = [];
+
+  const getPageName = () => {
+    const pathname = history.location.pathname;
+
+    const parts = pathname.split('/');
+    const [_, name, firstParam, secondParam, thirdParam] = parts;
+
+    let resultName = places[pathname];
+    if (firstParam) {
+      const isNumber = +firstParam;
+
+      if (isNumber) {
+        resultName = places[`/${name}/details`];
+      } else {
+        resultName = places[`/${name}/${firstParam}`];
+      }
+    }
+
+    if (`/${name}` === BOT) {
+      if (+secondParam === 1) {
+        resultName = places[`/${name}/auto`];
+        return resultName;
+      }
+
+      if (+secondParam === 2) {
+        resultName = places[`/${name}/change`];
+        return resultName
+      }
+
+      if (+secondParam === 3) {
+        resultName = places[`/${name}/individual`];
+        return resultName
+      }
+    }
+
+    if (secondParam) {
+      const isNumber = +secondParam;
+      resultName = places[`/${name}/${secondParam}`];
+    }
+
+    return resultName;
   };
+
+  const place = {};
+
   return (
     <div
-      style={{ minHeight: appHeight }}
+      style={ { minHeight: appHeight } }
       className={
         classNames(
           classes.appFrameInner,
@@ -130,109 +171,109 @@ function Dashboard(props) {
         )
       }
     >
-      <GuideSlider openGuide={openGuide} closeGuide={handleCloseGuide} />
+      <GuideSlider openGuide={ openGuide } closeGuide={ handleCloseGuide } />
       { /* Left Sidebar Layout */
         layout === 'left-sidebar' && (
           <LeftSidebarLayout
-            history={history}
-            toggleDrawer={toggleDrawer}
-            loadTransition={loadTransition}
-            changeMode={changeMode}
-            sidebarOpen={sidebarOpen}
-            pageLoaded={pageLoaded}
-            mode={mode}
-            gradient={gradient}
-            deco={deco}
-            bgPosition={bgPosition}
-            place={place}
-            titleException={titleException}
-            handleOpenGuide={handleOpenGuide}
+            history={ history }
+            toggleDrawer={ toggleDrawer }
+            loadTransition={ loadTransition }
+            changeMode={ changeMode }
+            sidebarOpen={ sidebarOpen }
+            pageLoaded={ pageLoaded }
+            mode={ mode }
+            gradient={ gradient }
+            deco={ deco }
+            bgPosition={ bgPosition }
+            place={ getPageName() }
+            titleException={ titleException }
+            handleOpenGuide={ handleOpenGuide }
           >
-            {children}
+            { children }
           </LeftSidebarLayout>
         )
       }
       { /* Left Big-Sidebar Layout */
         layout === 'big-sidebar' && (
           <LeftSidebarBigLayout
-            history={history}
-            toggleDrawer={toggleDrawer}
-            loadTransition={loadTransition}
-            changeMode={changeMode}
-            sidebarOpen={sidebarOpen}
-            pageLoaded={pageLoaded}
-            gradient={gradient}
-            deco={deco}
-            bgPosition={bgPosition}
-            mode={mode}
-            place={place}
-            titleException={titleException}
-            handleOpenGuide={handleOpenGuide}
+            history={ history }
+            toggleDrawer={ toggleDrawer }
+            loadTransition={ loadTransition }
+            changeMode={ changeMode }
+            sidebarOpen={ sidebarOpen }
+            pageLoaded={ pageLoaded }
+            gradient={ gradient }
+            deco={ deco }
+            bgPosition={ bgPosition }
+            mode={ mode }
+            place={ place }
+            titleException={ titleException }
+            handleOpenGuide={ handleOpenGuide }
           >
-            {children}
+            { children }
           </LeftSidebarBigLayout>
         )
       }
       { /* Right Sidebar Layout */
         layout === 'right-sidebar' && (
           <RightSidebarLayout
-            history={history}
-            toggleDrawer={toggleDrawer}
-            loadTransition={loadTransition}
-            changeMode={changeMode}
-            sidebarOpen={sidebarOpen}
-            pageLoaded={pageLoaded}
-            mode={mode}
-            gradient={gradient}
-            deco={deco}
-            bgPosition={bgPosition}
-            place={place}
-            titleException={titleException}
-            handleOpenGuide={handleOpenGuide}
+            history={ history }
+            toggleDrawer={ toggleDrawer }
+            loadTransition={ loadTransition }
+            changeMode={ changeMode }
+            sidebarOpen={ sidebarOpen }
+            pageLoaded={ pageLoaded }
+            mode={ mode }
+            gradient={ gradient }
+            deco={ deco }
+            bgPosition={ bgPosition }
+            place={ place }
+            titleException={ titleException }
+            handleOpenGuide={ handleOpenGuide }
           >
-            {children}
+            { children }
           </RightSidebarLayout>
         )
       }
       { /* Top Bar with Dropdown Menu */
         layout === 'top-navigation' && (
           <DropMenuLayout
-            history={history}
-            toggleDrawer={toggleDrawer}
-            loadTransition={loadTransition}
-            changeMode={changeMode}
-            sidebarOpen={sidebarOpen}
-            pageLoaded={pageLoaded}
-            mode={mode}
-            gradient={gradient}
-            deco={deco}
-            bgPosition={bgPosition}
-            place={place}
-            titleException={titleException}
-            handleOpenGuide={handleOpenGuide}
+            history={ history }
+            toggleDrawer={ toggleDrawer }
+            loadTransition={ loadTransition }
+            changeMode={ changeMode }
+            sidebarOpen={ sidebarOpen }
+            pageLoaded={ pageLoaded }
+            mode={ mode }
+            gradient={ gradient }
+            deco={ deco }
+            bgPosition={ bgPosition }
+            place={ place }
+            titleException={ titleException }
+            handleOpenGuide={ handleOpenGuide }
           >
-            {children}
+            { children }
           </DropMenuLayout>
         )
       }
       { /* Top Bar with Mega Menu */
         layout === 'mega-menu' && (
           <MegaMenuLayout
-            history={history}
-            toggleDrawer={toggleDrawer}
-            loadTransition={loadTransition}
-            changeMode={changeMode}
-            sidebarOpen={sidebarOpen}
-            pageLoaded={pageLoaded}
-            mode={mode}
-            gradient={gradient}
-            deco={deco}
-            bgPosition={bgPosition}
-            place={place}
-            titleException={titleException}
-            handleOpenGuide={handleOpenGuide}
+            history={ history }
+            toggleDrawer={ toggleDrawer }
+            loadTransition={ loadTransition }
+            changeMode={ changeMode }
+            sidebarOpen={ sidebarOpen }
+            pageLoaded={ pageLoaded }
+            mode={ mode }
+            gradient={ gradient }
+            deco={ deco }
+            bgPosition={ bgPosition }
+            place={ place }
+            titleException={ titleException }
+            handleOpenGuide={ handleOpenGuide }
           >
-            {children}
+            { children }
           </MegaMenuLayout>
         )
       }
