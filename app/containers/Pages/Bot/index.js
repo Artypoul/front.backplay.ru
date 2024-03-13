@@ -15,6 +15,7 @@ import TextField from '@material-ui/core/TextField';
 import Input from '@material-ui/core/Input';
 import Checkbox from '@material-ui/core/Checkbox';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { CHECKOUT } from '../../../utils/routes';
 
 const requestData = {};
 let createdOrderId = null;
@@ -163,13 +164,13 @@ const Bot = (props) => {
       const order = await MakeOrder(requestData);
       
       if (+type === 1) {
-        navigate.push(`/shop/checkout/${order.id}`);
+        navigate.push(`${CHECKOUT}/${order.id}`);
       }
 
       return order;
     }
 
-    navigate.push(`/shop/checkout/${createdOrderId}`);
+    navigate.push(`${CHECKOUT}/${createdOrderId}`);
     // if (step !== 4) {
     //   navigate.push(`/shop/checkout/${order.id}`);
 

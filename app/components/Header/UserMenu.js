@@ -24,7 +24,8 @@ import avatarApi from 'dan-api/images/avatars';
 import link from 'dan-api/ui/link';
 import styles from './header-jss';
 import { LogOutRequest } from './api';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { userClear } from '../../redux/actions/user';
 
 function UserMenu(props) {
   const [menuState, setMenuState] = useState({
@@ -33,6 +34,8 @@ function UserMenu(props) {
   });
 
   const history = useHistory();
+  const dispatch = useDispatch();
+
   const {
     user,
   } = useSelector(state => state.user);
@@ -52,6 +55,8 @@ function UserMenu(props) {
   const logOut = async () => {  
     const isLogedOut = await LogOutRequest();
 
+    dispatch(userClear());
+    
     if (isLogedOut) {
       localStorage.removeItem('token');
       history.push('/login');

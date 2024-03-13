@@ -41,9 +41,9 @@ const Orders = () => {
 
     setItems(orders.data.map((item) => {
       return [
-        item.author,
+        isAuthor ? item.user : item.author,
         item.name,
-        item.key,
+        item.key ? item.key.name : '',
         item.date,
         item.progress,
         item.status,
@@ -79,7 +79,6 @@ const Orders = () => {
     },
   };
 
-  console.log('page', page)
   const firstColumn = columns.at(0);
   firstColumn.name =  isAuthor ? 'Имя' : 'Автор';
   

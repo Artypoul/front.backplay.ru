@@ -34,7 +34,7 @@ function LeftSidebarLayout(props) {
     handleOpenGuide
   } = props;
 
-  const isBreadCrumbsShown = !place.path.includes('profile');
+  const isBreadCrumbsShown = place && !place.path.includes('profile');
   const {
     music,
   } = useSelector(state => state.player);
@@ -48,7 +48,7 @@ function LeftSidebarLayout(props) {
         position="left-sidebar"
         changeMode={changeMode}
         mode={mode}
-        title={place.name}
+        title={place && place.name}
         history={history}
         openGuide={handleOpenGuide}
       />

@@ -25,6 +25,9 @@ import { userInit } from '../../../redux/actions/user';
 import { useHistory, useParams } from 'react-router-dom/cjs/react-router-dom.min';
 import { GetOrder } from './api/getOrder';
 import { PayOrder } from './api/payOrder';
+import { formatCurrency } from '../../../utils/formatCurrency';
+import Success from './success';
+import { CHECKOUT } from '../../../utils/routes';
 
 const styles = theme => ({
   appBar: {
@@ -81,6 +84,7 @@ function Checkout(props) {
   const {
     user,
   } = useSelector(state => state.user);
+  
   const dispatch = useDispatch();
 
   const {
@@ -94,7 +98,9 @@ function Checkout(props) {
     }
 
     const message = await PayOrder(orderId);
-    history.push(`/shop/payment/${orderId}/success`);
+    if (message) {
+      history.push(`/payment/${orderId}/success`);
+    }
   };
 
   const getOrderHandler = async () => {
@@ -123,27 +129,30 @@ function Checkout(props) {
   }, []);
   
   const getContent = () => {
-    // if (false) {
-    //   return (
-    //     <div className={classes.finishMessage}>
-    //       <Typography variant="h4" gutterBottom>
-    //         <span>
-    //           <i className="ion-ios-checkmark-outline" />
-    //         </span>
-    //         Thank you for your order.
-    //       </Typography>
-    //       <Typography variant="subtitle1">
-    //         Your order number is&nbsp;
-    //         <strong>#2001539</strong>
-    //         .&nbsp;We have emailed your order confirmation, and will
-    //         send you an update when your order has shipped.
-    //       </Typography>
-    //       <Button variant="contained" color="primary" href="/app/pages/ecommerce" className={classes.button}>
-    //         Shoping Again
-    //       </Button>
-    //     </div>
-    //   );
-    // }
+    let description = '';
+    if (order) {
+      if (order.with_bass) {
+        description += `с басом - ${formatCurrency(order.amount)},`;
+      } else {
+        description += `без баса - ${formatCurrency(order.amount)},`;
+      }
+  
+      if (order.key) {
+        description += ` тональность ${order.key.name},`;
+      }
+  
+      if (order.change) {
+        description += ` Изменения ${order.change.name},`;
+      } else {
+        description += ` оригинальное изменение,`;
+      }
+  
+      if (order.with_drums) {
+        description += ` с барабанами`;
+      } else {
+        description += ` без барабанов`;
+      }
+    }
 
     return (
       <form onSubmit={handleSubmit(onSubmitHandler)}>
@@ -158,8 +167,7 @@ function Checkout(props) {
               <SideReview
                 items={[{
                   name: order.name,
-                  // description: `${order.author}, c` 'PLAYBACK PRO, с басом - 800р. ориг. тональльность без барабанов',
-                  description: `${order.author}, c басом - ${order.amount}р. ориг. тональльность без барабанов`,
+                  description,
                   img: 'https://api.backplay.ru/storage/uploads/uySsVGpPPgUG5Mp2aIadWOLUYZ5XQ43eNLdxPVhr.png',
                 }]}
                 totalPrice={order.amount}
