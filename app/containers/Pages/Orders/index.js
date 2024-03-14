@@ -71,6 +71,11 @@ const Orders = () => {
     onTableChange: (action, tableState) => {
       console.log('action, tableState', action, tableState)
       if (action === 'changePage') {
+        if (tableState.page === 0) {
+          setPage(1);
+          return;
+        }
+
         setPage(tableState.page);
       }
       if (action === 'changeRowsPerPage') {

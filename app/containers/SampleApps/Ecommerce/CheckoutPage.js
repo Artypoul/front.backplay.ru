@@ -168,7 +168,7 @@ function Checkout(props) {
                 items={[{
                   name: order.name,
                   description,
-                  img: 'https://api.backplay.ru/storage/uploads/uySsVGpPPgUG5Mp2aIadWOLUYZ5XQ43eNLdxPVhr.png',
+                  img: order.preview.path,
                 }]}
                 totalPrice={order.amount}
               />
