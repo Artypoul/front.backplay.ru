@@ -2,9 +2,12 @@ import { alpha } from '@material-ui/core/styles';
 import cyan from '@material-ui/core/colors/cyan';
 import indigo from '@material-ui/core/colors/indigo';
 import red from '@material-ui/core/colors/red';
+
 import bg from 'dan-images/petal_grey_bg.svg';
+import bgV2 from 'dan-images/petal_v2.svg';
 import bgLight from 'dan-images/petal_bg.svg';
 import { gradientBgLight } from 'containers/Templates/appStyles-jss';
+
 const rootWraper = {
   display: 'flex',
   width: '100%',
@@ -45,6 +48,8 @@ const styles = theme => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     width: '100%',
+    backgroundImage: `url(${bgV2})`,
+    backgroundSize: 'cover',
     [theme.breakpoints.down('md')]: {
       overflow: 'hidden'
     },

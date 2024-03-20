@@ -450,7 +450,16 @@ const ProductPage = (props) => {
           }}
         >
           {(product.tags || []).map((tag) => (
-            <Button key={tag.id} variant='outlined' color='secondary'>{tag.name}</Button>
+            <Button
+              key={tag.id}
+              variant='outlined'
+              color='secondary'
+              style={{
+                minWidth: 'auto',
+              }}
+            >
+              {tag.name}
+            </Button>
           ))}
         </div>
 
@@ -461,7 +470,16 @@ const ProductPage = (props) => {
           }}
         >
           {variants.map((varinat) => (
-            <Button key={varinat.id} variant='outlined' color='secondary'>{varinat.key && varinat.key.name}</Button>
+            <Button
+              key={varinat.id}
+              variant='outlined'
+              color='secondary'
+              style={{
+                minWidth: 'auto',
+              }}
+            >
+              {varinat.key && varinat.key.name}
+            </Button>
           ))}
         </div>
 
@@ -498,7 +516,7 @@ const ProductPage = (props) => {
           {(!isEdit && !isCreate) && (
             <div className={classes.titleWrapper}>
               <Typography variant='h2' component='h2' className={classes.title}>
-                {product.name}
+                {product.singer} - {product.name}
               </Typography>
 
               <Rating

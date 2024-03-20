@@ -69,7 +69,6 @@ const Orders = () => {
     fullWidth: true,
     pagination: true,
     onTableChange: (action, tableState) => {
-      console.log('action, tableState', action, tableState)
       if (action === 'changePage') {
         if (tableState.page === 0) {
           setPage(1);

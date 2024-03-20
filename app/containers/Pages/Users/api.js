@@ -1,40 +1,46 @@
 import { axiosInstance } from "../../../utils/axios";
 
 export const LoginRequest = async (values) => {
-  const {
-    email,
-    password,
-  } = values;
+  try {
+    const {
+      email,
+      password,
+    } = values;
 
-  if (!email || !password) {
+    if (!email || !password) {
+      return {
+        message: 'Invalid data',
+      };
+    }
+
+    const {
+      data,
+      status,
+    } = await axiosInstance.post('/login', {
+      email,
+      password,
+    });
+
+    if (status === 200) {
+      const token = data.token;
+
+      localStorage.setItem('token', token.access_token)
+
+      return {
+        user: token.user,
+        message: 'Login is successfull',
+      };
+    }
+
     return {
-      message: 'Invalid data',
+      user: null,
+      message: 'Cannot login',
     };
-  }
-
-  const {
-    data,
-    status,
-  } = await axiosInstance.post('/login', {
-    email,
-    password,
-  });
-
-  if (status === 200) {
-    const token = data.token;
-    
-    localStorage.setItem('token', token.access_token)
-
+  } catch (error) {
     return {
-      user: token.user,
-      message: 'Login is successfull',
-    };
+      message: 'Неверные данные',
+    }
   }
-
-  return {
-    user: null,
-    message: 'Cannot login',
-  };
 };
 
 export const SendPasswordRequest = async (email) => {
@@ -53,6 +59,6 @@ export const SendPasswordRequest = async (email) => {
   }
 
   return {
-    message: 'Cannot send password',
+    message: 'Не верные данные',
   };
 };

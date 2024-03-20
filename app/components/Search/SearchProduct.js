@@ -62,22 +62,11 @@ function SearchProduct(props) {
     keyword,
     dataProduct,
     handleSwitchView,
-    listView
+    listView,
+    placeholder = 'Найти проект',
   } = props;
 
-  const debounce = useDebounce(search, 700)
-  // const getTotalResult = dataArray => {
-  //   let totalResult = 0;
-  //   for (let i = 0; i < dataArray.length; i += 1) {
-  //     if (dataArray[i].name === undefined) {
-  //       return false;
-  //     }
-  //     if ((dataArray[i].name).toLowerCase().indexOf(keyword) !== -1) {
-  //       totalResult += 1;
-  //     }
-  //   }
-  //   return totalResult;
-  // };
+  const debounce = useDebounce(search, 700);
 
   const onChangeHandler = (event) => {
     const finalValue = event.target.value.trim();
@@ -101,13 +90,12 @@ function SearchProduct(props) {
                 <div className={classes.search}>
                   <SearchIcon />
                 </div>
-                <input className={classes.input} placeholder="Search Product" onChange={onChangeHandler} />
+                <input className={classes.input} placeholder={placeholder} onChange={onChangeHandler} />
               </div>
             </div>
 
             <Typography variant="caption" className={classes.result}>
-              {/* {getTotalResult(dataProduct)} Results */}
-              {dataProduct && dataProduct.length} Results
+              {dataProduct && dataProduct.length} Результат(ов)
             </Typography>
           </div>
 

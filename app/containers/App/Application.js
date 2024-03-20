@@ -47,12 +47,6 @@ function Application(props) {
           <Route component={NotFound} />
         </Switch>
       </Dashboard>
-
-      {/* <Outer>
-        <Switch>
-          <Route path={`${CHECKOUT}/:id/success`} component={Success} />
-        </Switch>
-      </Outer> */}
     </Fragment>
   );
 }

@@ -160,17 +160,7 @@ function Header(props) {
             </Typography>
           </div>
         </Hidden>
-        <div className={classes.searchWrapper}>
-          <div className={classNames(classes.wrapper, classes.light)}>
-            <div className={classes.search}>
-              <SearchIcon />
-            </div>
-            <SearchUi history={history} />
-          </div>
-        </div>
-        <Hidden xsDown>
-          <span className={classes.separatorV} />
-        </Hidden>
+        
         <UserMenu />
       </Toolbar>
     </AppBar>

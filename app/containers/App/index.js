@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
 
 import NotFound from 'containers/Pages/Standalone/NotFoundDedicated';
+import { useSelector } from 'react-redux';
 import Application from './Application';
 import Auth from './Auth';
 import ThemeWrapper from './ThemeWrapper';
-import { useSelector } from 'react-redux';
 
 window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
 

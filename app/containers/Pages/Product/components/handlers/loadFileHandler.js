@@ -5,7 +5,9 @@ export const loadFileHandler = (action, event, field) => {
     return;
   }
 
-  if (!file.type.match(/svg|png|jpg|jpeg|mp4|mp3|mpeg/g)) {
+  const rexexp = field === 'demo' ? /wa(v|ve)|aiff|x\-aiff|octet\-stream|flac|x\-flac|mpeg|mp3|ogg/g : /svg|png|jpg|jpeg|mp4|mp3|mpeg/g;
+  
+  if (!file.type.match(rexexp)) {
     return;
   }
 

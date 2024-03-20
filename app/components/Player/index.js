@@ -29,7 +29,7 @@ const Player = (props) => {
   
   const ref = useRef(null);
   const dispatch = useDispatch();
-
+  
   const playStateHandler = () => {
     if (isStarted) {
       setIsStarted(false);

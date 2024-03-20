@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet';
-import brand from 'dan-api/dummy/brand';
-import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
 import Hidden from '@material-ui/core/Hidden';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+
+import brand from 'dan-api/dummy/brand';
 import { LoginFormV2 } from 'dan-components';
 import styles from 'dan-components/Forms/user-jss';
-import { useHistory } from 'react-router-dom';
-import { LoginRequest, SendPasswordRequest } from './api';
-import { useDispatch } from 'react-redux';
+
+import PropTypes from 'prop-types';
 import { userInit } from '../../../redux/actions/user';
 import { HOME } from '../../../utils/routes';
+import { LoginRequest, SendPasswordRequest } from './api';
 
 function LoginV2(props) {
   const history = useHistory()
@@ -28,9 +31,11 @@ function LoginV2(props) {
       dispatch(userInit(user));
       history.push(HOME);
     }
+
+    return message;
   };
 
-  const title = brand.name + ' - Login Version 2';
+  const title = brand.name;
   const description = brand.desc;
   const { classes } = props;
   return (

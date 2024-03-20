@@ -74,7 +74,7 @@ export const styles = theme => ({
     left: '50%',
     top: '50%',
     transform: 'translate(-50%, -50%)',
-    // pointerEvents: 'none',
+    pointerEvents: 'none',
   },
   vartiantsWrapper: {
     display: 'flex',

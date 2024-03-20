@@ -72,6 +72,31 @@ const Sum = (props) => {
     return nf.format(data.amount);
   };
 
+  const getMenuItem = (menuItem, menuItemIndex) => {
+    if (menuItem === menuItems[3]) {
+      return (
+        <MenuItem
+          key={menuItem}
+          className={`${classes.menuItem} ${menuItemIndex % 2 ? null : classes.primary}`}
+        >
+          <a href={data.link} download={true} target='_blank'>
+            {menuItem}
+          </a>
+        </MenuItem>
+      );
+    }
+
+    return (
+      <MenuItem
+        key={menuItem}
+        onClick={handleMenuItemClick(menuItem)}
+        className={`${classes.menuItem} ${menuItemIndex % 2 ? null : classes.primary}`}
+      >
+        {menuItem}
+      </MenuItem>
+    );
+  };
+
   return (
     <div
       style={{
@@ -93,15 +118,7 @@ const Sum = (props) => {
           className: classes.menu
         }}
       >
-        {menuItems.map((menuItem, menuItemIndex) => (
-          <MenuItem
-            key={menuItem}
-            onClick={handleMenuItemClick(menuItem)}
-            className={`${classes.menuItem} ${menuItemIndex % 2 ? null : classes.primary}`}
-          >
-            {menuItem}
-          </MenuItem>
-        ))}
+        {menuItems.map((menuItem, menuItemIndex) => getMenuItem(menuItem, menuItemIndex))}
       </Menu>
     </div>
   );

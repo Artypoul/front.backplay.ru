@@ -16,6 +16,11 @@ export const styles = theme => ({
     color: 'rgba(0, 0, 0, .54)',
     padding: '3px 8px',
     borderRadius: 10,
+
+    '&>a': {
+      textDecoration: 'none',
+      color: 'inherit',
+    }
   },
   primary: {
     backgroundColor: '#B3E5FC',

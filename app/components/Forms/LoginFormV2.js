@@ -1,3 +1,8 @@
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import { Field, reduxForm } from 'redux-form';
+
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import IconButton from '@material-ui/core/IconButton';
@@ -8,15 +13,12 @@ import { withStyles } from '@material-ui/core/styles';
 import ArrowForward from '@material-ui/icons/ArrowForward';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+
 import classNames from 'classnames';
 import brand from 'dan-api/dummy/brand';
-import logo from 'dan-images/logo.svg';
 import { Notification } from 'dan-components';
+import logo from 'dan-images/logo.svg';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { connect, useDispatch } from 'react-redux';
-import { NavLink, useHistory } from 'react-router-dom';
-import { Field, reduxForm } from 'redux-form';
 import { TextFieldRedux } from './ReduxFormMUI';
 import styles from './user-jss';
 
@@ -31,7 +33,7 @@ const email = value => (
 function LoginFormV2(props) {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
 
   const handleClickShowPassword = () => {
     setShowPassword(show => !show);
@@ -55,13 +57,19 @@ function LoginFormV2(props) {
 
       if (isSuccess) {
         setShowPasswordForm(true);
-      }
+        setMessage('Пароль успещно отправлен');
 
-      setErrorMessage(message)
+        return;
+      }
+      
+      setMessage('Не удалось отправить пароль');
       return;
     }
 
-    formAction(values)
+    const message = await formAction(values);
+    if (message) {
+      setMessage(message);
+    }
   };
 
   const {
@@ -125,12 +133,12 @@ function LoginFormV2(props) {
 
   return (
     <Paper className={ classNames(classes.sideWrap, deco && classes.petal) }>
-      <Notification message={errorMessage} close={setErrorMessage} />
+      <Notification message={message} close={setMessage} />
       <div className={ classes.topBar }>
-        <NavLink to="/" className={ classes.brand }>
+        <div className={ classes.brand }>
           <img src={ logo } alt={ brand.name } />
           { brand.name }
-        </NavLink>
+        </div>
       </div>
 
       <div className={ classes.wrapper }>

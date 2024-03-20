@@ -17,6 +17,7 @@ const styles = (theme, opacity) => ({
     right: 0,
     bottom: 0,
     zIndex: 9999,
+    overflow: 'hidden',
 
     textAlign: 'center',
     background: 'linear-gradient(-45deg, #2196F3 0%, #2196F3 33%, #00BFA5 100%)',
@@ -53,6 +54,11 @@ const styles = (theme, opacity) => ({
     justifyContent: 'flex-start',
     padding: '12px 68px',
     backgroundColor: '#fff',
+
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      gap: 24,
+    },
   },
   navigate: {
     fontSize: 14,

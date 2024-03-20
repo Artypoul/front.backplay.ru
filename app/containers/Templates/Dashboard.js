@@ -172,7 +172,7 @@ function Dashboard(props) {
       }
     >
       <GuideSlider openGuide={ openGuide } closeGuide={ handleCloseGuide } />
-      { /* Left Sidebar Layout */
+      {
         layout === 'left-sidebar' && (
           <LeftSidebarLayout
             history={ history }
@@ -193,7 +193,7 @@ function Dashboard(props) {
           </LeftSidebarLayout>
         )
       }
-      { /* Left Big-Sidebar Layout */
+      {/* {
         layout === 'big-sidebar' && (
           <LeftSidebarBigLayout
             history={ history }
@@ -213,8 +213,8 @@ function Dashboard(props) {
             { children }
           </LeftSidebarBigLayout>
         )
-      }
-      { /* Right Sidebar Layout */
+      } */}
+      {/* {
         layout === 'right-sidebar' && (
           <RightSidebarLayout
             history={ history }
@@ -234,8 +234,8 @@ function Dashboard(props) {
             { children }
           </RightSidebarLayout>
         )
-      }
-      { /* Top Bar with Dropdown Menu */
+      } */}
+      {/* {
         layout === 'top-navigation' && (
           <DropMenuLayout
             history={ history }
@@ -255,8 +255,8 @@ function Dashboard(props) {
             { children }
           </DropMenuLayout>
         )
-      }
-      { /* Top Bar with Mega Menu */
+      } */}
+      {/* {
         layout === 'mega-menu' && (
           <MegaMenuLayout
             history={ history }
@@ -276,7 +276,7 @@ function Dashboard(props) {
             { children }
           </MegaMenuLayout>
         )
-      }
+      } */}
     </div>
   );
 }
