@@ -11,6 +11,9 @@ import Info from '@material-ui/icons/Info';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './jss/cover-jss';
+import { LoadAvatar } from './api';
+import { useDispatch } from 'react-redux';
+import { userInit } from '../../redux/actions/user';
 
 const optionsOpt = [
   'Edit Profile',
@@ -31,7 +34,10 @@ function Cover(props) {
     desc,
     coverImg,
     button,
+    userId,
   } = props;
+
+  const dispatch = useDispatch();
 
   const handleClickOpt = event => {
     setAnchorElOpt(event.currentTarget);
@@ -39,6 +45,17 @@ function Cover(props) {
 
   const handleCloseOpt = () => {
     setAnchorElOpt(null);
+  };
+  
+  const loadAvatar = async (event) => {
+    const [file] = event.target.files;
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('file_type_id', 1);
+
+    const updatedUser = await LoadAvatar(userId, formData);
+    dispatch(userInit(updatedUser));
   };
 
   return (
@@ -76,7 +93,10 @@ function Cover(props) {
         </Menu>
       </div>
       <div className={classes.content}>
-        <Avatar alt={name} src={avatar} className={classes.avatar} />
+        <label>
+          <Avatar alt={name} src={avatar} className={classes.avatar} />
+          <input type="file" onChange={loadAvatar} />
+        </label>
         <Typography variant="h4" className={classes.name} gutterBottom>
           {name}
           <VerifiedUser className={classes.verified} />

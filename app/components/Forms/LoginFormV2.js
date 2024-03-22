@@ -55,14 +55,12 @@ function LoginFormV2(props) {
         message,
       } = await sendPassword(email)
 
+      setMessage(message);
+
       if (isSuccess) {
         setShowPasswordForm(true);
-        setMessage('Пароль успещно отправлен');
-
-        return;
       }
       
-      setMessage('Не удалось отправить пароль');
       return;
     }
 

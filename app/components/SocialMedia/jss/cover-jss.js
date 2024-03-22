@@ -42,7 +42,11 @@ const styles = theme => ({
     margin: `0 auto ${theme.spacing(2)}px`,
     width: 120,
     height: 120,
-    boxShadow: theme.glow.medium
+    boxShadow: theme.glow.medium,
+
+    '&+input[type="file"]': {
+      display: 'none',
+    },
   },
   opt: {
     position: 'absolute',

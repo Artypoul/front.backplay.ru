@@ -9,7 +9,7 @@ export const LoginRequest = async (values) => {
 
     if (!email || !password) {
       return {
-        message: 'Invalid data',
+        message: 'Неверные данные',
       };
     }
 
@@ -28,13 +28,13 @@ export const LoginRequest = async (values) => {
 
       return {
         user: token.user,
-        message: 'Login is successfull',
+        message: data.message,
       };
     }
 
     return {
       user: null,
-      message: 'Cannot login',
+      message: data.message,
     };
   } catch (error) {
     return {
@@ -59,6 +59,6 @@ export const SendPasswordRequest = async (email) => {
   }
 
   return {
-    message: 'Не верные данные',
+    message: 'Неверные данные',
   };
 };

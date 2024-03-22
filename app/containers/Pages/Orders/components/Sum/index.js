@@ -49,7 +49,7 @@ const Sum = (props) => {
           history.push(`${PROJECT}/${data.project_id}`)
           break;
         case menuItems[1]:
-          history.push(`${BOT}/${data.id}/2`);
+          history.push(`${BOT}/${data.project_id}/2`);
           break;
         case menuItems[2]:
           history.push(`${ORDER}/${data.id}`);

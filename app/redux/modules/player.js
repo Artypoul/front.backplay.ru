@@ -3,6 +3,7 @@ import { ADD, INIT, NEXT, PLAY, PLAY_INNER, PREV, REMOVE, UPDATE_MUSIC_INDEX } f
 
 const initialState = {
   music: null,
+  isPlayed: false,
   selectedMusicIndex: 0,
   musics: [],
 };
@@ -17,14 +18,23 @@ const aboutReducer = (state = initialState, action = {}) => produce(state, draft
       draft.musics = action.payload;
       break;
     case PLAY:
-      draft.selectedMusicIndex = action.payload === null ? draft.selectedMusicIndex : action.payload;
-      draft.music = draft.musics[draft.selectedMusicIndex].demo;
+      draft.selectedMusicIndex = action.payload === undefined ? draft.selectedMusicIndex : action.payload;
+      
+      const selectedDemo = draft.musics[draft.selectedMusicIndex].demo;
+      if ((draft.music && draft.music.name) === selectedDemo.name) {
+        draft.isPlayed = !draft.isPlayed;
+        return;
+      }
+      
+      draft.isPlayed = true;
+      draft.music = selectedDemo;
       break;
     case PLAY_INNER:
       const demo = action.payload;
       draft.music = demo;
       break;
     case NEXT:
+      draft.isPlayed = true;
       if ((draft.musics.length - 1) > draft.selectedMusicIndex) {
         draft.selectedMusicIndex = draft.selectedMusicIndex + 1;
         draft.music = draft.musics[draft.selectedMusicIndex].demo;
@@ -39,6 +49,7 @@ const aboutReducer = (state = initialState, action = {}) => produce(state, draft
       }
       break;
     case PREV:
+      draft.isPlayed = true;
       if (draft.selectedMusicIndex) {
         draft.selectedMusicIndex = draft.selectedMusicIndex - 1;
         draft.music = draft.musics[draft.selectedMusicIndex].demo;

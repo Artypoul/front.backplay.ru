@@ -490,7 +490,16 @@ const ProductPage = (props) => {
           }}
         >
           {variants.map((varinat) => (
-            <Button key={varinat.id} variant='outlined' color='secondary'>{varinat.change && varinat.change.name}</Button>
+            <Button
+              key={varinat.id}
+              variant='outlined'
+              color='secondary'
+              style={{
+                minWidth: 'auto',
+              }}
+            >
+              {varinat.change && varinat.change.name}
+            </Button>
           ))}
         </div>
       </div>

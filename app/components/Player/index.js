@@ -14,8 +14,8 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { prevArrow, nextArrow } from './icons';
 
 import { styles } from './player-jss';
-import { useDispatch } from 'react-redux';
-import { NextMusic, PrevMusic } from '../../redux/actions/player';
+import { useDispatch, useSelector } from 'react-redux';
+import { NextMusic, PlayMusic, PrevMusic } from '../../redux/actions/player';
 
 const Player = (props) => {
   const {
@@ -23,22 +23,26 @@ const Player = (props) => {
     data,
   } = props;
 
-  const [isStarted, setIsStarted] = useState(true);
+  // const [isStarted, setIsStarted] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);
   const [isSliderDrag, setIsSliderDrag] = useState(false);
+
+  const {
+    isPlayed,
+  } = useSelector(state => state.player);
   
   const ref = useRef(null);
   const dispatch = useDispatch();
   
   const playStateHandler = () => {
-    if (isStarted) {
-      setIsStarted(false);
+    if (!isPlayed) {
+      dispatch(PlayMusic());
       ref.current.pause();
-
+      
       return;
     }
-
-    setIsStarted(true);
+    
+    dispatch(PlayMusic());
     ref.current.play();
   };
   
@@ -73,9 +77,18 @@ const Player = (props) => {
     setIsSliderDrag(false);
   };
 
+  useEffect(() => {
+    if (!isPlayed) {
+      ref.current.pause();
+      return;
+    }
+
+    ref.current.play();
+  }, [isPlayed]);
+
   return (
     <div className={classes.background}>
-      <audio ref={ref} src={data.path} autoPlay={isStarted} onTimeUpdate={onTimeUpdateHandler}></audio>
+      <audio ref={ref} src={data.path} autoPlay={true} onTimeUpdate={onTimeUpdateHandler}></audio>
 
       <div className={classes.left}>
         <div className={classes.buttons}>
@@ -86,7 +99,7 @@ const Player = (props) => {
           </div>
 
           <Fab size='small' className={classes.play} onClick={playStateHandler}>
-            {isStarted ? (
+            {isPlayed ? (
               <StopIcon />
             ) : (
               <PlayArrowIcon />

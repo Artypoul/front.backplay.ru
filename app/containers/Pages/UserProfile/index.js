@@ -99,6 +99,7 @@ function UserProfile(props) {
       <Cover
         coverImg={bgCover}
         avatar={user.avatar && user.avatar.path}
+        userId={user.id}
         name={`${user.first_name} ${user.last_name}`}
         desc={isAdmin ? 'Автор' : 'Пользователь'}
         button={isAdmin && {

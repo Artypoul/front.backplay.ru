@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
@@ -38,7 +38,7 @@ function ChatRoom(props) {
     field.current.value = '';
     setTimeout(() => {
       ctn.scrollTo(0, ctn.scrollHeight);
-    }, 300);
+    }, 0);
   };
 
   const sendMessageByEnter = (event, msg) => {
@@ -65,6 +65,12 @@ function ChatRoom(props) {
     hideDetail,
     userId,
   } = props;
+
+  useEffect(() => {
+    if (dataChat) {
+      resetInput();
+    }
+  }, [dataChat]);
 
   const getChat = dataArray => dataArray.map(data => {
     const renderHTML = { __html: data.message };

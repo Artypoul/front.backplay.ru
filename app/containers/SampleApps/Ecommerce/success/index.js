@@ -56,8 +56,10 @@ const styles = (theme, opacity) => ({
     backgroundColor: '#fff',
 
     [theme.breakpoints.down('xs')]: {
-      flexDirection: 'column',
-      gap: 24,
+      padding: '12px 8px',
+      justifyContent: 'space-between',
+      // flexDirection: 'column',
+      // gap: 24,
     },
   },
   navigate: {
